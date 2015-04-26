@@ -1,0 +1,5 @@
+*.o
+*~
+*.root
+*.dat
+Delphes_Analysis
