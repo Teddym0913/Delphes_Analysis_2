@@ -4,7 +4,7 @@
 
 using namespace std;
 
-TreeReader::TreeReader(char *configfile)
+TreeReader::TreeReader(const char *configfile)
 {
 	ifstream config(configfile,ios::in);
 	string temp,a,b,Bname,Bclass;
@@ -56,11 +56,9 @@ bool TreeReader::SetTreeChain(TChain *chain)
 
 }
 
+
 bool TreeReader::GetEntry(Long64_t entry)
 {
-	reader->ReadEntry(entry);
-	if(reader)
-		return 1;
-	else
-		return 0;
+	bool good=reader->ReadEntry(entry);
+    return good;
 }

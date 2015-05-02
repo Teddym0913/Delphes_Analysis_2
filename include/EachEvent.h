@@ -6,8 +6,10 @@
 #include "classes/DelphesClasses.h"
 #include "classes/DelphesFactory.h"
 
+
 // #include "ExRootAnalysis/ExRootTreeReader.h"
 // #include "ExRootAnalysis/ExRootTreeWriter.h"
+using namespace std;
 
 class EachEvent
 {
@@ -17,14 +19,14 @@ public:
 
 
 private:
-	Jet *jets;
-	Electron *eles;
-	Muon *muons;
-	MissingET *MET;
+	vector<Jet*> jets;
+	vector<Electron*> eles;
+	vector<Muon*> muons;
+	vector<MissingET*> MET;
 
-	GenParticle *GenPars;
-    Photon *phos;
-    ScalarHT *SHT;
+	vector<GenParticle*> GenPars;
+    vector<Photon*> phos;
+    vector<ScalarHT*> SHT;
 
 //    Advanced_Data *Advanced_Data
 };
