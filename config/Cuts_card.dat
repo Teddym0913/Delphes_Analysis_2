@@ -1,0 +1,22 @@
+Basic Cuts:
+{
+    PTmin Jets 3 50 40 30
+    PTmin Leps 1 25
+    dRJJ 0.4
+    dRJL 0.4
+    dRLL 0.4
+    dPhiJMET 0.6 0.8
+    NLep&&Sign 1 1
+}
+
+Advanced Cuts:
+{
+    NCuts  7
+    MET  200  500  20
+    HT  400  800  50
+    MT  80  150  10
+    dMLL  5  15  5
+    MT2  80  200  20
+    NJets  4  8  1
+    NBjets 2  4  1
+}
