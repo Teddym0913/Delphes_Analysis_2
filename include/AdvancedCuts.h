@@ -5,6 +5,7 @@
 #include <map>
 #include <iostream>
 #include <utility>
+#include "Variables.h"
 
 using namespace std;
 
@@ -18,5 +19,15 @@ public:
 	typedef vector<pair<string,double*> > TAdvancedCuts;
 	TAdvancedCuts MyAdCuts;
 //	map<string,double*> MyAdCuts;
+
+
+	void SetAdCutsFunction();
+private:
+	int NCuts;
+	double *VariablesResults;
+	typedef map<string, double(*)(TreeReader::TBranchArray)> TFuncMap;
+	TFuncMap MyFuncs;
+
+	TFuncMap::iterator *iterFunc;
 };
 #endif

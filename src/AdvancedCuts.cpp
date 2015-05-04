@@ -4,7 +4,6 @@
 AdvancedCuts::AdvancedCuts(const char *configfile)
 {
 	ifstream config(configfile,ios::in);
-	int NCuts;
 	string tag,tag_inner,cName;
 	while(config)
 	{
@@ -43,4 +42,19 @@ AdvancedCuts::AdvancedCuts(const char *configfile)
 			config.ignore(999,'\n');
 		}
 	}
+	
+}
+
+AdvancedCuts::~AdvancedCuts()
+{}
+
+void AdvancedCuts::SetAdCutsFunction()
+{
+	VariablesResults = new double[NCuts];
+	iterFunc = new TFuncMap::iterator[NCuts];
+	for (int i = 0; i < NCuts; ++i)
+	{
+		iterFunc[i] = MyFuncs.find(MyAdCuts[i].first);
+	}
+
 }
