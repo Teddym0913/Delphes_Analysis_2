@@ -59,7 +59,7 @@ GLIBS        += $(ROOTGLIBS) $(SYSLIBS)
 SRC = $(wildcard $(SrcDir)/*.$(SrcSuf))
 OBJ           = $(patsubst $(SrcDir)/%.$(SrcSuf),$(ObjDir)/%.$(ObjSuf),$(SRC))
 DEP           = $(patsubst $(SrcDir)/%.$(SrcSuf),$(DepDir)/%.$(DepSuf),$(SRC))
-OBJS          = $(OBJ)
+OBJS          = $(OBJ) $(ObjDir)/EachEventDef.$(ObjSuf)
 
 #------------------------------------------------------------------------------
 $(Target):	$(OBJS) $(Mainfile)
@@ -69,7 +69,11 @@ $(Target):	$(OBJS) $(Mainfile)
 $(ObjDir)/%.$(ObjSuf):$(SrcDir)/%.$(SrcSuf)
 	@$(CXX) $(CXXFLAGS) -o $@  $(GLIBS) $(LIBS) -c $<
 
+
+$(SrcDir)/EachEventDef.$(SrcSuf):$(IncDir)/EachEvent.h $(IncDir)/EachEventLinkDef.h
+	@echo "Generating dictionary $@..."
+	rootcint -f $@ -c $(INCLUDES) $(DEFINES) $^
 #-------------------------------------------------------------------------------
 clean:
-	@rm -rf $(OBJS) $(Target)
+	@rm -rf $(OBJS) $(Target) $(SrcDir)/EachEventDef.$(SrcSuf) $(SrcDir)/EachEventDef.$(IncSuf)
 	@echo "--->Clean Done"

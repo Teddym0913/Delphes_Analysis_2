@@ -1,6 +1,7 @@
 #include "TROOT.h"
 #include "TreeReader.h"
 #include "BasicCuts.h"
+#include "EachEvent.h"
 #include "TChain.h"
 #include "modules/Delphes.h"
 #include "classes/DelphesClasses.h"
@@ -23,24 +24,34 @@ int main(/*int argc, char const *argv[]*/)
 	cout<<iteBranch->first.first<<endl;
 	bool good =1;
 	int left=0;
+
+	TFile *f1 = new TFile("test.root","recreate");
+	TTree *t1 = new TTree("t1","test");
+	EachEvent *event = new EachEvent();
+
+	t1->Branch("event","EachEvent",&event);
+
 	for (int j = 0; j < allEntries; ++j)
 	{
-		reader->GetEntry(j);
+		// reader->GetEntry(j);
 		// for (int i = 0; i < iteBranch->second->GetEntriesFast(); ++i)
 		// {
 		// 	cout<<((Jet*)iteBranch->second->At(i))->PT<<endl;
 		// }
 		// cout<<"Remove!"<<endl;
-		good = MyBasic->process(reader);
+		// good = MyBasic->process(reader);
 		// for (int i = 0; i < iteBranch->second->GetEntriesFast(); ++i)
 		// {
 		// 	cout<<((Jet*)iteBranch->second->At(i))->PT<<endl;
 		// }
-		if(!good) continue;
+		// if(!good) continue;
 		// cout<<j<<endl;
-		left++;
+		// left++;
+		event->SetData(j);
+		t1->Fill();
 	}
-	cout<<left<<endl;
+	f1->Write();
+	//cout<<left<<endl;
 	return 0;
 }
 
