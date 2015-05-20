@@ -35,7 +35,7 @@ private:
 
 
 public:
-	void SetSource(TreeReader::TBranchArray);
+	void SetSource(TreeReader *);
 	void SetData();
 	void SetMT2LorentzVector(TLorentzVector&, TLorentzVector&);
 //    Advanced_Data *Advanced_Data

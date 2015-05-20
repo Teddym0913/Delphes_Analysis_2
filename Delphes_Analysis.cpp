@@ -28,14 +28,14 @@ int main(/*int argc, char const *argv[]*/)
 	TFile *f1 = new TFile("test.root","recreate");
 	TTree *t1 = new TTree("t1","test");
 	EachEvent *event = new EachEvent();
-	event->SetSource(reader->MyBranch);
+	event->SetSource(reader);
 
 	t1->Branch("event","EachEvent",&event);
 
 	for (int j = 0; j < allEntries; ++j)
 	{
 	    reader->GetEntry(j);
-	    event->SetSource(reader->MyBranch);
+	    //event->SetSource(reader->MyBranch);
 		//cout<<j<<endl;
 		good = MyBasic->process();
 		if(good) 

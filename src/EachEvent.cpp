@@ -22,12 +22,12 @@ EachEvent::EachEvent()
 EachEvent::~EachEvent()
 {}
 
-void EachEvent::SetSource(TreeReader::TBranchArray MyBranch)
+void EachEvent::SetSource(TreeReader* reader)
 {
-	iteJet = MyBranch.find(make_pair("Jet","Jet"));
-	iteEle = MyBranch.find(make_pair("Electron","Electron"));
-	iteMuon = MyBranch.find(make_pair("Muon","Muon"));
-	iteMET = MyBranch.find(make_pair("MissingET","MissingET"));
+	iteJet = reader->MyBranch.find(make_pair("Jet","Jet"));
+	iteEle = reader->MyBranch.find(make_pair("Electron","Electron"));
+	iteMuon = reader->MyBranch.find(make_pair("Muon","Muon"));
+	iteMET = reader->MyBranch.find(make_pair("MissingET","MissingET"));
 
 }
 
