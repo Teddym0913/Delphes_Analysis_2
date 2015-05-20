@@ -83,7 +83,7 @@ BasicCuts::~BasicCuts()
 	
 }
 
-bool BasicCuts::process(TreeReader *reader)
+bool BasicCuts::process()
 {
 	bool goodevent=1;
 //	GetBranch(reader);

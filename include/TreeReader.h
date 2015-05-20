@@ -23,20 +23,22 @@ public:
 	~TreeReader();
 	bool SetTreeChain(TChain *chain);
     bool GetEntry(Long64_t entry);
-    bool InitCuts(char *CutsConfig);
+    //bool InitCuts(char *CutsConfig);
 
-    ExRootTreeReader *reader;
-    typedef map<pair<string,string>, TClonesArray*> TBranchArray;  //The key is the info of branch (first is branch name, second is branch class), the value is the return value of treereader->UseBranch(xx)
-    TBranchArray MyBranch;
+    ExRootTreeReader *reader; //!
+    typedef map<pair<string,string>, TClonesArray*> TBranchArray;  //! The key is the info of branch (first is branch name, second is branch class), the value is the return value of treereader->UseBranch(xx)
+    TBranchArray MyBranch; //!
     //TBranchArray::iterator iteJetBranch;
     // vector<Jet*> jets;
     // vector<Electron*> ele;
     
 	//Here I can decide how many branch I will use and what are they. I can read the branch infomation from the delphes card or from some configure files
 private:
-	vector<pair<string,string> > BranchInfo; // First is the name of branch, the second is the classname of the same branch
+	vector<pair<string,string> > BranchInfo; //! First is the name of branch, the second is the classname of the same branch
     // TFile *fBasicOut;
     // TTree *tBasicOut = new TTree("af_Basic","Resutls after Basic Cuts!");
+
+    ClassDef(TreeReader,1);
     
 };
 #endif

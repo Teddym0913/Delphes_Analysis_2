@@ -13,7 +13,7 @@ class BasicCuts
 public:
 	BasicCuts(const char *config="./config/Cuts_card.dat");
 	~BasicCuts();
-	bool process(TreeReader *);
+	bool process();
 
 	void GetBranch(TreeReader *);
 

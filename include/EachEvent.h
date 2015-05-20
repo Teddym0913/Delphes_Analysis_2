@@ -1,10 +1,10 @@
 #ifndef EachEvent_h
 #define EachEvent_h
 
-// #include "TreeReader.h"
-// #include "modules/Delphes.h"
-// #include "classes/DelphesClasses.h"
-// #include "classes/DelphesFactory.h"
+#include "TreeReader.h"
+#include "modules/Delphes.h"
+#include "classes/DelphesClasses.h"
+#include "classes/DelphesFactory.h"
 #include "TROOT.h"
 #include "TObject.h"
 
@@ -24,11 +24,33 @@ public:
 	double Meff;
 	double MT;
 	double MET;
-	double dMll;
+	double dMLL;
 	double MT2;
 
-	void SetData(int i);
+private:
+	TreeReader::TBranchArray::iterator iteJet; //! Jets iterator
+	TreeReader::TBranchArray::iterator iteEle; //! Electron iterator
+	TreeReader::TBranchArray::iterator iteMuon; //! Muon iterator
+	TreeReader::TBranchArray::iterator iteMET; //! MET iterator
+
+
+public:
+	void SetSource(TreeReader::TBranchArray);
+	void SetData();
+	void SetMT2LorentzVector(TLorentzVector&, TLorentzVector&);
 //    Advanced_Data *Advanced_Data
+
+
+	double Get_MET();
+	double Get_HT();
+	double Get_Meff();
+	double Get_MT();
+	double Get_dMLL();
+	double Get_MT2();
+	int Get_NJetsTot();
+	int Get_NBjets();
+
 	ClassDef(EachEvent,1);
+
 };
 #endif
