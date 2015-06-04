@@ -38,6 +38,22 @@ BasicCuts::BasicCuts(const char *configfile)
 								JetPTmin.push_back(PTmin);
 							}
 						}
+						else if(NameCate=="RJets")
+						{
+							for (int i = 0; i < Num; ++i)
+							{
+								config>>PTmin;
+								RJetPTmin.push_back(PTmin);
+							}
+						}
+						else if(NameCate=="BJets")
+						{
+							for (int i = 0; i < Num; ++i)
+							{
+								config>>PTmin;
+								BJetPTmin.push_back(PTmin);
+							}
+						}
 						else if(NameCate=="Leps")
 						{
 							for (int i = 0; i < Num; ++i)
@@ -45,6 +61,18 @@ BasicCuts::BasicCuts(const char *configfile)
 								config>>PTmin;
 								LepPTmin.push_back(PTmin);
 							}
+						}
+					}
+					else if(tag_inner=="Etamax")
+					{
+						config>>NameCate;
+						if (NameCate=="Jet")
+						{
+							config>>EtamaxJet;
+						}
+						else if (NameCate=="Lep")
+						{
+							config>>EtamaxLep;
 						}
 					}
 					else if(tag_inner=="dRJJ")
@@ -67,6 +95,14 @@ BasicCuts::BasicCuts(const char *configfile)
 					{
 						config>>NLepSign[0]>>NLepSign[1];
 					}
+					// else if (tag_inner=="NJetmin")
+					// {
+					// 	config>>NJetmin;
+					// }
+					// else if (tag_inner=="NBJetmin")
+					// {
+					// 	config>>NBJetmin;
+					// }
 					config.ignore(999,'\n');
 				}
 			}
@@ -87,25 +123,27 @@ bool BasicCuts::process()
 {
 	bool goodevent=1;
 //	GetBranch(reader);
-	BasicJetPTmin(iteBranchJet->second,JetPTmin.back());  //Remove those Jets whose PT is not larger than the minimum requirement
+	BasicJetPTminEtamax(iteBranchJet->second,JetPTmin.back(),EtamaxJet);  //Remove those Jets whose PT is not larger than the minimum requirement
 	goodevent *= BasicdPhi(iteBranchJet->second,iteBranchMET->second,dPhiJMET);  // Check the dPhi between Jets and MET, Remove those Jets whose dPhi<dPhiJMET[0]. And return False if there is some jet having dPhiJMET[0]<dPhi<dPhiJMET[1]
 	if(!goodevent) return goodevent;
-	goodevent *= BasicLeadingPT(iteBranchJet->second,JetPTmin);  // Check the PT of Leading Jets
+	goodevent *= BasicLeadingPT(iteBranchJet->second,JetPTmin);  // Check the PT of Leading Jets (all jets)
 	if(!goodevent) return goodevent;
-	BasicElePTmin(iteBranchEle->second,LepPTmin.back());  // Remove those leptons whose PT is not larger than the minimum requirement
-	BasicMuonPTmin(iteBranchMuon->second,LepPTmin.back()); // Remove those leptons whose PT is not larger than the minimum requirement
+	goodevent *= BasicLeadingPT(iteBranchJet->second,RJetPTmin,BJetPTmin); // Check the PT of leading Regular Jets and Bjets
+	if(!goodevent) return goodevent;
+	BasicElePTminEtamax(iteBranchEle->second,LepPTmin.back(),EtamaxLep);  // Remove those leptons whose PT is not larger than the minimum requirement or has too large Eta
+	BasicMuonPTminEtamax(iteBranchMuon->second,LepPTmin.back(),EtamaxLep); // Remove those leptons whose PT is not larger than the minimum requirement or has too large Eta
 	BasicdREle(iteBranchJet->second,iteBranchEle->second,dRJL); // Remove those leptons who is too close to Jets
 	BasicdRMuon(iteBranchJet->second,iteBranchMuon->second,dRJL); // Remove those leptons who is too close to Jets
 	goodevent *= BasicNLepSign(iteBranchEle->second,iteBranchMuon->second,NLepSign,LepPTmin);
 	return goodevent;
 }
 
-void BasicCuts::BasicJetPTmin(TClonesArray * CandidatesArray, double PTmin)
+void BasicCuts::BasicJetPTminEtamax(TClonesArray * CandidatesArray, double PTmin, double Etamax)
 {
 	// Remove Those Jets from the Array whose PT is not larger than the minimum requirement
 	for (int iCan = 0; iCan < CandidatesArray->GetEntriesFast();iCan++ )
 	{
-		if(((Jet *)CandidatesArray->At(iCan))->PT<PTmin)
+		if(((Jet *)CandidatesArray->At(iCan))->PT<PTmin||fabs(((Jet *)CandidatesArray->At(iCan))->Eta)>Etamax)
 		{
 			CandidatesArray->RemoveAt(iCan);
 		//	cout<<"Remove one!"<<endl;
@@ -114,12 +152,12 @@ void BasicCuts::BasicJetPTmin(TClonesArray * CandidatesArray, double PTmin)
 	CandidatesArray->Compress();
 }
 
-void BasicCuts::BasicElePTmin(TClonesArray * CandidatesArray, double PTmin)
+void BasicCuts::BasicElePTminEtamax(TClonesArray * CandidatesArray, double PTmin,double Etamax)
 {
 	// Remove Those Jets from the Array whose PT is not larger than the minimum requirement
 	for (int iCan = 0; iCan < CandidatesArray->GetEntriesFast();iCan++ )
 	{
-		if(((Electron *)CandidatesArray->At(iCan))->PT<PTmin)
+		if(((Electron *)CandidatesArray->At(iCan))->PT<PTmin||fabs(((Electron *)CandidatesArray->At(iCan))->Eta)>Etamax)
 		{
 			CandidatesArray->RemoveAt(iCan);
 		} 
@@ -127,12 +165,12 @@ void BasicCuts::BasicElePTmin(TClonesArray * CandidatesArray, double PTmin)
 	CandidatesArray->Compress();
 }
 
-void BasicCuts::BasicMuonPTmin(TClonesArray * CandidatesArray, double PTmin)
+void BasicCuts::BasicMuonPTminEtamax(TClonesArray * CandidatesArray, double PTmin, double Etamax)
 {
 	// Remove Those Jets from the Array whose PT is not larger than the minimum requirement
 	for (int iCan = 0; iCan < CandidatesArray->GetEntriesFast();iCan++ )
 	{
-		if(((Muon *)CandidatesArray->At(iCan))->PT<PTmin)
+		if(((Muon *)CandidatesArray->At(iCan))->PT<PTmin||fabs(((Muon *)CandidatesArray->At(iCan))->Eta)>Etamax)
 		{
 			CandidatesArray->RemoveAt(iCan);
 		} 
@@ -150,6 +188,45 @@ bool BasicCuts::BasicLeadingPT(TClonesArray *CandidatesArray, vector<double> PTm
 	for (int i = 0; i < NCandidatesMin; ++i)
 	{
 		if(((Jet *)CandidatesArray->At(i))->PT<PTmin[i]) return false;      
+	}
+	return true;
+}
+
+bool BasicCuts::BasicLeadingPT(TClonesArray *CandidatesArray, vector<double> PTRJetmin, vector<double> PTBJetmin)
+{
+	int NCandidatesRJetMin = PTRJetmin.size();
+	int NCandidatesBJetMin = PTBJetmin.size();
+	int NCandidatesArray = CandidatesArray->GetEntriesFast();
+	//if(NCandidatesArray<NCandidatesMin) return false;
+	int NRJetReal = 0;
+	int NBJetReal = 0;
+	bool isBjet = 0;
+	// Make Sure the PT of those Leading Jets are satisfied.
+	for (int i = 0; i < NCandidatesArray; ++i)
+	{
+		isBjet=(((Jet*)CandidatesArray->At(i))->BTag & (1<<0));
+		if (isBjet)
+		{
+			if (NBJetReal>=NCandidatesBJetMin)
+			{
+				continue;
+			}
+			if(((Jet *)CandidatesArray->At(i))->PT<PTBJetmin[NBJetReal]) return false;
+			NBJetReal++;
+		}
+		else
+		{
+			if (NRJetReal>=NCandidatesRJetMin)
+			{
+				continue;
+			}
+			if(((Jet *)CandidatesArray->At(i))->PT<PTBJetmin[NRJetReal]) return false;
+			NRJetReal++;
+		}		      
+	}
+	if (NRJetReal<NCandidatesRJetMin||NBJetReal<NCandidatesBJetMin)
+	{
+		return false;
 	}
 	return true;
 }

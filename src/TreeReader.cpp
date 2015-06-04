@@ -52,6 +52,8 @@ bool TreeReader::SetTreeChain(TChain *chain)
 			Goodness *= 0;
 		}
 	}
+	TClonesArray *branchEventtemp = reader->UseBranch("Event");
+	MyBranch.insert(make_pair(make_pair("Event","LHEFEvent"),branchEventtemp));
 	return Goodness;
 
 }

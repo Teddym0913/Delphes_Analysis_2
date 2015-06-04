@@ -19,17 +19,22 @@ public:
 
 private:
 	vector<double> JetPTmin;
+	vector<double> RJetPTmin;
+	vector<double> BJetPTmin;
 	vector<double> LepPTmin;
 	int NLepSign[2];
+	double EtamaxJet;
+	double EtamaxLep;
 	double dRJJ;
 	double dRJL;
 	double dRLL;
 	double dPhiJMET[2];
 
-	void BasicJetPTmin(TClonesArray *,double);
-	void BasicElePTmin(TClonesArray *,double);
-	void BasicMuonPTmin(TClonesArray *,double);
+	void BasicJetPTminEtamax(TClonesArray *,double,double);
+	void BasicElePTminEtamax(TClonesArray *,double,double);
+	void BasicMuonPTminEtamax(TClonesArray *,double,double);
 	bool BasicLeadingPT(TClonesArray *,vector<double>);
+	bool BasicLeadingPT(TClonesArray *,vector<double>,vector<double>); // Select the leading Regular Jet PT and leading B-Jet PT also require the minimum number of Regular Jet and B-Jet
 	//bool BasicLeadingPT(TClonesArray *, TClonesArray *, vector<double>);
 	//bool BasicdR(TClonesArray*, double);
 	void BasicdREle(TClonesArray*,TClonesArray*,double);

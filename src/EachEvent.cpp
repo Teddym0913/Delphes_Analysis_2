@@ -9,6 +9,8 @@
 
 EachEvent::EachEvent()
 {
+	Ntotal=0;
+	Weight=1;
 	NJets=0;
 	NBjets=0;
 	MET=0;
@@ -28,19 +30,27 @@ void EachEvent::SetSource(TreeReader* reader)
 	iteEle = reader->MyBranch.find(make_pair("Electron","Electron"));
 	iteMuon = reader->MyBranch.find(make_pair("Muon","Muon"));
 	iteMET = reader->MyBranch.find(make_pair("MissingET","MissingET"));
-
+	iteEvent = reader->MyBranch.find(make_pair("Event","LHEFEvent"));
+	Ntotal = reader->reader->GetEntries();
 }
 
 void EachEvent::SetData()
 {
+	Weight=Get_Weight();
 	NBjets=Get_NBjets();
 	NJets=Get_NJetsTot()-NBjets;
 	MET=Get_MET();
 	dMLL=0;
 	HT=Get_HT();
 	Meff=Get_Meff();
-	MT=0;
+	MT=Get_MT();
 	MT2=0;
+}
+
+double EachEvent::Get_Weight()
+{
+	double weight = ((LHEFEvent *)iteEvent->second->At(0))->Weight;
+	return weight==0?1:weight;
 }
 
 double EachEvent::Get_MET()
