@@ -1,7 +1,7 @@
 # This file controls the loop over background
 # Number of Background
-NB 5
-ttbar 1 123 1.0 path/to/ttbar # name cs k-factor #of-path path1 path2 ...
+NB 1
+ttbar_semi 1 123 1.0 /home/teddy/workingspace/My_Code/Delphes_Analysis_2/ # name cs k-factor #of-path path1 path2 ...
 tth
 ttw
 ttz
