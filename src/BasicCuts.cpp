@@ -220,11 +220,11 @@ bool BasicCuts::BasicLeadingPT(TClonesArray *CandidatesArray, vector<double> PTR
 			{
 				continue;
 			}
-			if(((Jet *)CandidatesArray->At(i))->PT<PTBJetmin[NRJetReal]) return false;
+			if(((Jet *)CandidatesArray->At(i))->PT<PTRJetmin[NRJetReal]) return false;
 			NRJetReal++;
 		}		      
 	}
-	if (NRJetReal<NCandidatesRJetMin||NBJetReal<NCandidatesBJetMin)
+	if (/*NRJetReal<NCandidatesRJetMin||*/NBJetReal<NCandidatesBJetMin)
 	{
 		return false;
 	}
