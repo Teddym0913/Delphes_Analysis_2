@@ -1,7 +1,9 @@
 #include "EachEvent.h"
-#include "Variables.h"
-#include "Mt2/Basic_Mt2_332_Calculator.h"
-#include "Mt2/ChengHanBisect_Mt2_332_Calculator.h"
+//#include "Variables.h"
+
+//#include "Mt2/Basic_Mt2_332_Calculator.h"
+//#include "Mt2/ChengHanBisect_Mt2_332_Calculator.h"
+
 
 #ifndef MZ
 #define MZ 91.188
@@ -180,34 +182,38 @@ int EachEvent::Get_NBjets()
 	return NBjetsTemp;
 }
 
+// double EachEvent::Get_MT2()
+// {
+// 	TLorentzVector PSA;
+// 	TLorentzVector PSB;
+// 	SetMT2LorentzVector(PSA,PSB);
+// 	double METtemp=((MissingET*)iteMET->second->At(0))->MET;
+// 	double METphitemp=((MissingET*)iteMET->second->At(0))->Phi;
+
+// 	Mt2::Basic_Mt2_332_Calculator mt2Calculator;
+//   	const double massOfSystemA = PSA.M();
+//   	const double pxOfSystemA = PSA.Px();
+//   	const double pyOfSystemA = PSA.Py();
+  
+//  	const double massOfSystemB = PSB.M();
+//   	const double pxOfSystemB = PSB.Px();
+//   	const double pyOfSystemB = PSB.Py();
+  
+//   	const double pxMiss = METtemp*cos(METphitemp);
+//   	const double pyMiss = METtemp*sin(METphitemp);
+
+//   	const double invis_mass = 0.0;
+
+//   	Mt2::LorentzTransverseVector  vis_A(Mt2::TwoVector(pxOfSystemA, pyOfSystemA), massOfSystemA);
+//   	Mt2::LorentzTransverseVector  vis_B(Mt2::TwoVector(pxOfSystemB, pyOfSystemB), massOfSystemB);
+//   	Mt2::TwoVector                pT_Miss(pxMiss, pyMiss);
+   
+//     const double mt2 = mt2Calculator.mt2_332(vis_A, vis_B, pT_Miss, invis_mass);
+//     return mt2;
+// }
 double EachEvent::Get_MT2()
 {
-	TLorentzVector PSA;
-	TLorentzVector PSB;
-	SetMT2LorentzVector(PSA,PSB);
-	double METtemp=((MissingET*)iteMET->second->At(0))->MET;
-	double METphitemp=((MissingET*)iteMET->second->At(0))->Phi;
-
-	Mt2::Basic_Mt2_332_Calculator mt2Calculator;
-  	const double massOfSystemA = PSA.M();
-  	const double pxOfSystemA = PSA.Px();
-  	const double pyOfSystemA = PSA.Py();
-  
- 	const double massOfSystemB = PSB.M();
-  	const double pxOfSystemB = PSB.Px();
-  	const double pyOfSystemB = PSB.Py();
-  
-  	const double pxMiss = METtemp*cos(METphitemp);
-  	const double pyMiss = METtemp*sin(METphitemp);
-
-  	const double invis_mass = 0.0;
-
-  	Mt2::LorentzTransverseVector  vis_A(Mt2::TwoVector(pxOfSystemA, pyOfSystemA), massOfSystemA);
-  	Mt2::LorentzTransverseVector  vis_B(Mt2::TwoVector(pxOfSystemB, pyOfSystemB), massOfSystemB);
-  	Mt2::TwoVector                pT_Miss(pxMiss, pyMiss);
-   
-    const double mt2 = mt2Calculator.mt2_332(vis_A, vis_B, pT_Miss, invis_mass);
-    return mt2;
+	return 0;
 }
 
 void EachEvent::SetMT2LorentzVector(TLorentzVector &TLVA, TLorentzVector &TLVB)

@@ -83,7 +83,7 @@ void background_BasicLoop(char const *filename)
 		{
 			configfile.ignore(999,'\n');
 		}
-		char first
+		char first;
 		configfile.get(first);
 		configfile.putback(first);
 	}
@@ -91,7 +91,7 @@ void background_BasicLoop(char const *filename)
 
 int main(int argc, char const *argv[])
 {
-	
+	background_BasicLoop("./config/background_loop");
 	return 0;
 }
 

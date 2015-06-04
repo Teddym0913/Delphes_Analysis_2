@@ -25,11 +25,12 @@ ROOTGLIBS    := $(shell root-config --glibs)
 
 DELPHESCFLAGS := -I/home/teddy/workingspace/MC-Package/MG5_aMC_v2_2_1/Delphes -I/home/teddy/workingspace/MC-Package/MG5_aMC_v2_2_1/Delphes/external
 DELPHESLIBS  := -L/home/teddy/workingspace/MC-Package/MG5_aMC_v2_2_1/Delphes -lDelphes
+DELPHESSPECIAL := -Xlinker -rpath /home/teddy/workingspace/MC-Package/MG5_aMC_v2_2_1/Delphes/
 
-MT2CFLAGS := -I/home/teddy/workingspace/Useful-Package/MT2_Variable/include/oxbridgekinetics-1.0
-MT2LIBS := -L/home/teddy/workingspace/Useful-Package/MT2_Variable/lib/ -loxbridgekinetics-1.0
-MT2GLIBS := -L/home/teddy/workingspace/Useful-Package/MT2_Variable/lib/ -loxbridgekinetics-1.0
-MT2SPECIAL := -Xlinker -rpath /home/teddy/workingspace/Useful-Package/MT2_Variable/lib/
+#MT2CFLAGS := -I/home/teddy/workingspace/Useful-Package/MT2_Variable/include/oxbridgekinetics-1.0
+#MT2LIBS := -L/home/teddy/workingspace/Useful-Package/MT2_Variable/lib/ -loxbridgekinetics-1.0
+#MT2GLIBS := -L/home/teddy/workingspace/Useful-Package/MT2_Variable/lib/ -loxbridgekinetics-1.0
+#MT2SPECIAL := -Xlinker -rpath /home/teddy/workingspace/Useful-Package/MT2_Variable/lib/
 
 
 #INCDIRS	+= $(EXTRAHDR)
@@ -58,8 +59,8 @@ DEFINES      += -DTESTCODE
 endif
 
 CXXFLAGS     += $(DEFINES) $(INCLUDES) $(DELPHESCFLAGS)
-LIBS         += $(ROOTLIBS) $(SYSLIBS) $(DELPHESLIBS) $(MT2LIBS)
-GLIBS        += $(ROOTGLIBS) $(SYSLIBS) $(MT2GLIBS)
+LIBS         += $(ROOTLIBS) $(SYSLIBS) $(DELPHESLIBS) #$(MT2LIBS)
+GLIBS        += $(ROOTGLIBS) $(SYSLIBS) #$(MT2GLIBS)
 
 #------------------------------------------------------------------------------
 SRC = $(wildcard $(SrcDir)/*.$(SrcSuf))
@@ -69,7 +70,7 @@ OBJS          = $(OBJ) $(ObjDir)/EachEventDef.$(ObjSuf) $(ObjDir)/TreeReaderDef.
 
 #------------------------------------------------------------------------------
 $(Target):	$(OBJS) $(Mainfile)
-		@$(LD) $(LDFLAGS) $(CXXFLAGS) $(Mainfile) -o $@ -L./ $(OBJS) $(GLIBS) $(LIBS) $(MT2SPECIAL)
+		@$(LD) $(LDFLAGS) $(CXXFLAGS) $(Mainfile) -o $@ -L./ $(OBJS) $(GLIBS) $(LIBS) $(DELPHESSPECIAL) #$(MT2SPECIAL)
 		@echo "--->$@ done"
 
 $(ObjDir)/%.$(ObjSuf):$(SrcDir)/%.$(SrcSuf)
