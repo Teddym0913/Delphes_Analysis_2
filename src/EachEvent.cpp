@@ -38,7 +38,7 @@ void EachEvent::SetData()
 {
 	Weight=Get_Weight();
 	NBjets=Get_NBjets();
-	NJets=Get_NJetsTot()-NBjets;
+	NJets=Get_NJetsTot();//-NBjets;
 	MET=Get_MET();
 	dMLL=0;
 	HT=Get_HT();
