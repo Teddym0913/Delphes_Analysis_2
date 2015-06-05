@@ -11,8 +11,11 @@ TreeReader::TreeReader(const char *configfile)
 	while(config)
 	{
 		config>>temp;
-        if(temp=="#") config.ignore(999,'\n');
-        if(temp=="add")
+        if(temp=="#")
+        { 
+        	config.ignore(999,'\n');
+        }
+        else if(temp=="add")
         {
            config>>a;
             if(a=="Branch")
@@ -21,6 +24,10 @@ TreeReader::TreeReader(const char *configfile)
                 config.ignore(999,'\n');
                 BranchInfo.push_back(make_pair(Bname,Bclass));
             }
+        }
+        else
+        {
+        	config.ignore(999,'\n');
         }
 	}
 
