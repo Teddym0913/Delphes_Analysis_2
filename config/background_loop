@@ -1,7 +1,8 @@
+OUTPUT_PATH: /home/teddy/workingspace/My_Code/Delphes_Analysis_2/
 # This file controls the loop over background
 # Number of Background
 NB 1
-ttbar_semi 1 123 1.0 /home/teddy/workingspace/My_Code/Delphes_Analysis_2/ # name cs k-factor #of-path path1 path2 ...
+ttbar_semi 1 1 123 1.0 /home/teddy/workingspace/My_Code/Delphes_Analysis_2/ # proname Number-of-dir dir1-tag cs k-factor dir1 dir2-tag cs k-factor dir2 ......
 tth
 ttw
 ttz
