@@ -1,8 +1,19 @@
-OUTPUT_PATH: /home/teddy/workingspace/My_Code/Delphes_Analysis_2/
+OUTPUT_PATH: /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/Af_Advanced
 # This file controls the loop over background
 # Number of Background
 NB 1
-ttbar_semi 1 1 123 1.0 /home/teddy/workingspace/My_Code/Delphes_Analysis_2/ # proname Number-of-dir dir1-tag cs k-factor dir1 dir2-tag cs k-factor dir2 ......
+Bj_4p 7 0_300 34409920 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 300_600 2642850 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 600_1100 294120 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 1100_1800 25950 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 1800_2700 2420 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 2700_3700 230 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 3700_100000 28 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 
+ttbar 1 NO 261230 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/
+ttbb 1 NO 2330 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/
+tth 1 NO 102.08 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/
+ttW 1 NO 223.84 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/
+ttZ 1 NO 228.177 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/
+
+
+
+
+
+ttbar_semi 1 NO 261230 1.0 /home/teddy/workingspace/My_Code/Delphes_Analysis_2/ # proname Number-of-dir dir1-tag cs k-factor dir1 dir2-tag cs k-factor dir2 ......
 tth
 ttw
 ttz

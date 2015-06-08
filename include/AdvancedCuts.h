@@ -20,14 +20,16 @@ public:
 	TAdvancedCuts MyAdCuts;
 //	map<string,double*> MyAdCuts;
 
+	int GetNCuts(){ return NCuts; }
 
-	void SetAdCutsFunction();
+
+//	void SetAdCutsFunction();
 private:
 	int NCuts;
-	double *VariablesResults;
-	typedef map<string, double(*)(TreeReader::TBranchArray)> TFuncMap;
-	TFuncMap MyFuncs;
+	// double *VariablesResults;
+	// typedef map<string, double(*)(TreeReader::TBranchArray)> TFuncMap;
+	// TFuncMap MyFuncs;
 
-	TFuncMap::iterator *iterFunc;
+	// TFuncMap::iterator *iterFunc;
 };
 #endif

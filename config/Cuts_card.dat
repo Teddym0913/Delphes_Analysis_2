@@ -15,12 +15,12 @@ Basic Cuts:
 
 Advanced Cuts:
 {
-    NCuts  7
-    MET  200  500  20
-    HT  400  800  50
-    MT  80  150  10
+    NCuts  5
+    MET  100  200  20
+    HT  200  600  50
+    MT  100  200  20
+    NJets  3  6  1
+    NBjets 1  2  1
     dMLL  5  15  5
     MT2  80  200  20
-    NJets  4  8  1
-    NBjets 2  4  1
 }

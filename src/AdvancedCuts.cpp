@@ -48,13 +48,13 @@ AdvancedCuts::AdvancedCuts(const char *configfile)
 AdvancedCuts::~AdvancedCuts()
 {}
 
-void AdvancedCuts::SetAdCutsFunction()
-{
-	VariablesResults = new double[NCuts];
-	iterFunc = new TFuncMap::iterator[NCuts];
-	for (int i = 0; i < NCuts; ++i)
-	{
-		iterFunc[i] = MyFuncs.find(MyAdCuts[i].first);
-	}
+// void AdvancedCuts::SetAdCutsFunction()
+// {
+// 	VariablesResults = new double[NCuts];
+// 	iterFunc = new TFuncMap::iterator[NCuts];
+// 	for (int i = 0; i < NCuts; ++i)
+// 	{
+// 		iterFunc[i] = MyFuncs.find(MyAdCuts[i].first);
+// 	}
 
-}
+// }
