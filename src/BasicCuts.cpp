@@ -2,6 +2,51 @@
 #include "TLorentzVector.h"
 #include <algorithm>
 
+bool IncrPT(double a,double b)
+{
+	return (a>b);
+}
+
+ZCandidatesInfo::ZCandidatesInfo()
+{
+	NZ=0;
+}
+
+ZCandidatesInfo::~ZCandidatesInfo()
+{
+
+}
+
+void ZCandidatesInfo::Reset()
+{
+	Lep1.clear();
+	Lep2.clear();
+	NZ=0;
+}
+
+void ZCandidatesInfo::Insert(int lep1, int lep2, int lepflavor) // lepflavor 0 for electron 1 for muon
+{
+	Lep1.push_back(lep1);
+	Lep2.push_back(lep2);
+	LepFlavor.push_back(lepflavor);
+	NZ+=1;
+}
+
+int ZCandidatesInfo::GetNZ()
+{
+	return NZ;
+}
+
+int ZCandidatesInfo::GetZLepInfo1(int iZ) // Starts From 0 to NZ-1
+{
+	return Lep1[iZ];
+}
+int ZCandidatesInfo::GetZLepInfo2(int iZ) // Starts From 0 to NZ-1
+{
+	return Lep2[iZ];
+}
+
+
 BasicCuts::BasicCuts(const char *configfile)
 {
 	ifstream config(configfile,ios::in);
@@ -91,9 +136,9 @@ BasicCuts::BasicCuts(const char *configfile)
 					{
 						config>>dPhiJMET[0]>>dPhiJMET[1];
 					}
-					else if(tag_inner=="NLep&&Sign")
+					else if(tag_inner=="NLep&&NZ")
 					{
-						config>>NLepSign[0]>>NLepSign[1];
+						config>>NLepNZ[0]>>NLepNZ[1];
 					}
 					// else if (tag_inner=="NJetmin")
 					// {
@@ -123,6 +168,7 @@ bool BasicCuts::process()
 {
 	bool goodevent=1;
 //	GetBranch(reader);
+	ZLepInfo.Reset();
 	BasicJetPTminEtamax(iteBranchJet->second,JetPTmin.back(),EtamaxJet);  //Remove those Jets whose PT is not larger than the minimum requirement
 	goodevent *= BasicdPhi(iteBranchJet->second,iteBranchMET->second,dPhiJMET);  // Check the dPhi between Jets and MET, Remove those Jets whose dPhi<dPhiJMET[0]. And return False if there is some jet having dPhiJMET[0]<dPhi<dPhiJMET[1]
 	if(!goodevent) return goodevent;
@@ -134,7 +180,7 @@ bool BasicCuts::process()
 	BasicMuonPTminEtamax(iteBranchMuon->second,LepPTmin.back(),EtamaxLep); // Remove those leptons whose PT is not larger than the minimum requirement or has too large Eta
 	BasicdREle(iteBranchJet->second,iteBranchEle->second,dRJL); // Remove those leptons who is too close to Jets
 	BasicdRMuon(iteBranchJet->second,iteBranchMuon->second,dRJL); // Remove those leptons who is too close to Jets
-	goodevent *= BasicNLepSign(iteBranchEle->second,iteBranchMuon->second,NLepSign,LepPTmin);
+	goodevent *= BasicNLepNZ(iteBranchEle->second,iteBranchMuon->second,NLepNZ,LepPTmin);
 	return goodevent;
 }
 
@@ -300,30 +346,14 @@ bool BasicCuts::BasicdPhi(TClonesArray *CandidatesArrayJet, const TClonesArray *
 	return true;
 }
 
-bool BasicCuts::BasicNLepSign(TClonesArray *CandidatesArrayLepEle, TClonesArray *CandidatesArrayLepMuon, const int* NLepSign, vector<double> PTmin)
+bool BasicCuts::BasicNLepNZ(TClonesArray *CandidatesArrayLepEle, TClonesArray *CandidatesArrayLepMuon, const int* NLepNZ, vector<double> PTmin)
 {
 	int NLep1 = CandidatesArrayLepEle->GetEntriesFast();
 	int NLep2 = CandidatesArrayLepMuon->GetEntriesFast();
 	int NLep = NLep1+NLep2;
-	if (NLep!=NLepSign[0])
+	if (NLep!=NLepNZ[0])
 	{
 		return false;
-	}
-	int totCharge=1;
-	if(NLep==2)
-	{
-		for (int iLep1 = 0; iLep1 < NLep1; ++iLep1)
-		{
-			totCharge *= ((Electron *)CandidatesArrayLepEle->At(iLep1))->Charge;
-		}
-		for (int iLep2 = 0; iLep2 < NLep2; ++iLep2)
-		{
-			totCharge *= ((Muon *)CandidatesArrayLepMuon->At(iLep2))->Charge;
-		}
-		if(totCharge!=NLepSign[1])
-		{
-			return false;
-		}
 	}
 	vector<double> LepPT;
 	for (int iLep = 0; iLep < NLep1; ++iLep)
@@ -334,10 +364,490 @@ bool BasicCuts::BasicNLepSign(TClonesArray *CandidatesArrayLepEle, TClonesArray 
 	{
 		LepPT.push_back(((Muon *)CandidatesArrayLepMuon->At(iLep))->PT);
 	}
-	sort(LepPT.begin(),LepPT.end());
+	sort(LepPT.begin(),LepPT.end(),IncrPT); //Sort LepPT in Increasing Order
 	for (int iLep = 0; iLep < LepPT.size(); ++iLep)
 	{
 		if(LepPT[iLep]<PTmin[iLep]) return false;
+	}
+	int tempNZ=0;
+	if(NLep==2)
+	{
+		int totCharge=1;
+		if (NLep1==2)
+		{
+			TLorentzVector Pll;
+			for (int iLep1 = 0; iLep1 < NLep1; ++iLep1)
+			{
+				totCharge *= ((Electron *)CandidatesArrayLepEle->At(iLep1))->Charge;
+				Pll += ((Electron *)CandidatesArrayLepEle->At(iLep1))->P4();
+			}
+			if (totCharge==-1&&(fabs(Pll.M()-91.188)<10))
+			{
+				tempNZ+=1;
+				ZLepInfo.Insert(0,1,0);
+			}
+		}
+		else if (NLep2==2)
+		{
+			TLorentzVector Pll;
+			for (int iLep2 = 0; iLep2 < NLep2; ++iLep2)
+			{
+				totCharge *= ((Muon *)CandidatesArrayLepMuon->At(iLep2))->Charge;
+				Pll += ((Muon *)CandidatesArrayLepMuon->At(iLep2))->P4();
+			}
+			if (totCharge==-1&&(fabs(Pll.M()-91.188)<10))
+			{
+				tempNZ+=1;
+				ZLepInfo.Insert(0,1,1);
+			}
+		}
+		else
+		{
+			tempNZ=0;
+		}
+		if (tempNZ!=NLepNZ[1])
+		{
+			return false;
+		}
+	}
+	else if(NLep==3)
+	{
+		if (NLep1==3)
+		{
+			vector<TLorentzVector> P4plus;
+			vector<TLorentzVector> P4minus;
+			vector<int> iLepPlus;
+			vector<int> iLepMinus;
+			for (int iLep1 = 0; iLep1 < NLep1; ++iLep1)
+			{
+				if (((Electron *)CandidatesArrayLepEle->At(iLep1))->Charge > 0)
+				{
+					P4plus.push_back(((Electron *)CandidatesArrayLepEle->At(iLep1))->P4());
+					iLepPlus.push_back(iLep1);
+				}
+				else if (((Electron *)CandidatesArrayLepEle->At(iLep1))->Charge < 0)
+				{
+					P4minus.push_back(((Electron *)CandidatesArrayLepEle->At(iLep1))->P4());
+					iLepMinus.push_back(iLep1);
+				}
+				else
+				{
+					cout<<"Some Stupid Wrong in BasicCuts for Z-Candidates Finding!"<<endl;
+				}
+			}
+			if (P4plus.size()==1)
+			{
+				double tempdelta=1000000;
+				int tempilep=999;
+				TLorentzVector Pll;
+				for (int iminus = 0; iminus < P4minus.size(); ++iminus)
+				{
+					Pll = P4plus[0]+P4minus[iminus];
+					if(fabs(Pll.M()-91.188)<tempdelta)
+					{
+						tempdelta=fabs(Pll.M()-91.188);
+						tempilep=iminus;
+					}
+				}
+				if (tempilep!=999&&tempdelta<10)
+				{
+					tempNZ+=1;
+					ZLepInfo.Insert(iLepPlus[0],iLepMinus[tempilep],0);
+				}
+			}
+			else if (P4minus.size()==1)
+			{
+				double tempdelta=1000000;
+				int tempilep=999;
+				TLorentzVector Pll;
+				for (int iplus = 0; iplus < P4plus.size(); ++iplus)
+				{
+					Pll = P4minus[0]+P4plus[iplus];
+					if(fabs(Pll.M()-91.188)<tempdelta)
+					{
+						tempdelta=fabs(Pll.M()-91.188);
+						tempilep=iplus;
+					}
+				}
+				if (tempilep!=999&&tempdelta<10)
+				{
+					tempNZ+=1;
+					ZLepInfo.Insert(iLepPlus[tempilep],iLepMinus[0],0);
+				}
+			}
+			else
+			{
+				tempNZ=0;
+			}	
+		}
+		else if (NLep2==3)
+		{
+			vector<TLorentzVector> P4plus;
+			vector<TLorentzVector> P4minus;
+			vector<int> iLepPlus;
+			vector<int> iLepMinus;
+			for (int iLep1 = 0; iLep1 < NLep1; ++iLep1)
+			{
+				if (((Muon *)CandidatesArrayLepMuon->At(iLep1))->Charge > 0)
+				{
+					P4plus.push_back(((Muon *)CandidatesArrayLepMuon->At(iLep1))->P4());
+					iLepPlus.push_back(iLep1);
+				}
+				else if (((Muon *)CandidatesArrayLepMuon->At(iLep1))->Charge < 0)
+				{
+					P4minus.push_back(((Muon *)CandidatesArrayLepMuon->At(iLep1))->P4());
+					iLepMinus.push_back(iLep1);
+				}
+				else
+				{
+					cout<<"Some Stupid Wrong in BasicCuts for Z-Candidates Finding!"<<endl;
+				}
+			}
+			if (P4plus.size()==1)
+			{
+				double tempdelta=1000000;
+				int tempilep=999;
+				TLorentzVector Pll;
+				for (int iminus = 0; iminus < P4minus.size(); ++iminus)
+				{
+					Pll = P4plus[0]+P4minus[iminus];
+					if(fabs(Pll.M()-91.188)<tempdelta)
+					{
+						tempdelta=fabs(Pll.M()-91.188);
+						tempilep=iminus;
+					}
+				}
+				if (tempilep!=999&&tempdelta<10)
+				{
+					tempNZ+=1;
+					ZLepInfo.Insert(iLepPlus[0],iLepMinus[tempilep],1);
+				}
+			}
+			else if (P4minus.size()==1)
+			{
+				double tempdelta=1000000;
+				int tempilep=999;
+				TLorentzVector Pll;
+				for (int iplus = 0; iplus < P4plus.size(); ++iplus)
+				{
+					Pll = P4minus[0]+P4plus[iplus];
+					if(fabs(Pll.M()-91.188)<tempdelta)
+					{
+						tempdelta=fabs(Pll.M()-91.188);
+						tempilep=iplus;
+					}
+				}
+				if (tempilep!=999&&tempdelta<10)
+				{
+					tempNZ+=1;
+					ZLepInfo.Insert(iLepPlus[tempilep],iLepMinus[0],1);
+				}
+			}
+			else
+			{
+				tempNZ=0;
+			}
+		}
+		else if (NLep1==2&&NLep2==1)
+		{
+			TLorentzVector Pll;
+			for (int iLep1 = 0; iLep1 < NLep1; ++iLep1)
+			{
+				totCharge *= ((Electron *)CandidatesArrayLepEle->At(iLep1))->Charge;
+				Pll += ((Electron *)CandidatesArrayLepEle->At(iLep1))->P4();
+			}
+			if (totCharge==-1&&(fabs(Pll.M()-91.188)<10))
+			{
+				tempNZ+=1;
+				ZLepInfo.Insert(0,1,0);
+			}
+		}
+		else if (NLep1==1&&NLep2==2)
+		{
+			TLorentzVector Pll;
+			for (int iLep2 = 0; iLep2 < NLep2; ++iLep2)
+			{
+				totCharge *= ((Muon *)CandidatesArrayLepMuon->At(iLep2))->Charge;
+				Pll += ((Muon *)CandidatesArrayLepMuon->At(iLep2))->P4();
+			}
+			if (totCharge==-1&&(fabs(Pll.M()-91.188)<10))
+			{
+				tempNZ+=1;
+				ZLepInfo.Insert(0,1,1);
+			}
+		}
+		else
+		{
+			tempNZ=0;
+		}
+
+		if (tempNZ!=NLepNZ[1])
+		{
+			return false;
+		}
+	}
+	else if (NLep==4)
+	{
+		if (NLep1==4)
+		{
+			vector<TLorentzVector> P4plus;
+			vector<TLorentzVector> P4minus;
+			vector<int> iLepPlus;
+			vector<int> iLepMinus;
+			for (int iLep1 = 0; iLep1 < NLep1; ++iLep1)
+			{
+				if (((Electron *)CandidatesArrayLepEle->At(iLep1))->Charge > 0)
+				{
+					P4plus.push_back(((Electron *)CandidatesArrayLepEle->At(iLep1))->P4());
+					iLepPlus.push_back(iLep1);
+				}
+				else if (((Electron *)CandidatesArrayLepEle->At(iLep1))->Charge < 0)
+				{
+					P4minus.push_back(((Electron *)CandidatesArrayLepEle->At(iLep1))->P4());
+					iLepMinus.push_back(iLep1);
+				}
+				else
+				{
+					cout<<"Some Stupid Wrong in BasicCuts for Z-Candidates Finding!"<<endl;
+				}
+			}
+			if (P4plus.size()>=1&&P4plus.size()<=3)
+			{
+				for (int iplus = 0; iplus < P4plus.size(); ++iplus)
+				{
+					double tempdelta=1000000;
+					int tempilep=999;
+					TLorentzVector Pll;
+					for (int iminus = 0; iminus < P4minus.size(); ++iminus)
+					{
+						Pll = P4plus[iplus]+P4minus[iminus];
+						if(fabs(Pll.M()-91.188)<tempdelta)
+						{
+							tempdelta=fabs(Pll.M()-91.188);
+							tempilep=iminus;
+						}
+					}
+					if (tempilep!=999&&tempdelta<10)
+					{
+						tempNZ+=1;
+						ZLepInfo.Insert(iLepPlus[iplus],iLepMinus[tempilep],0);
+					}
+				}
+			}
+		}
+		else if (NLep2==4)
+		{
+			vector<TLorentzVector> P4plus;
+			vector<TLorentzVector> P4minus;
+			vector<int> iLepPlus;
+			vector<int> iLepMinus;
+			for (int iLep1 = 0; iLep1 < NLep1; ++iLep1)
+			{
+				if (((Muon *)CandidatesArrayLepMuon->At(iLep1))->Charge > 0)
+				{
+					P4plus.push_back(((Muon *)CandidatesArrayLepMuon->At(iLep1))->P4());
+					iLepPlus.push_back(iLep1);
+				}
+				else if (((Muon *)CandidatesArrayLepMuon->At(iLep1))->Charge < 0)
+				{
+					P4minus.push_back(((Muon *)CandidatesArrayLepMuon->At(iLep1))->P4());
+					iLepMinus.push_back(iLep1);
+				}
+				else
+				{
+					cout<<"Some Stupid Wrong in BasicCuts for Z-Candidates Finding!"<<endl;
+				}
+			}
+			if (P4plus.size()>=1&&P4plus.size()<=3)
+			{
+				for (int iplus = 0; iplus < P4plus.size(); ++iplus)
+				{
+					double tempdelta=1000000;
+					int tempilep=999;
+					TLorentzVector Pll;
+					for (int iminus = 0; iminus < P4minus.size(); ++iminus)
+					{
+						Pll = P4plus[iplus]+P4minus[iminus];
+						if(fabs(Pll.M()-91.188)<tempdelta)
+						{
+							tempdelta=fabs(Pll.M()-91.188);
+							tempilep=iminus;
+						}
+					}
+					if (tempilep!=999&&tempdelta<10)
+					{
+						tempNZ+=1;
+						ZLepInfo.Insert(iLepPlus[iplus],iLepMinus[tempilep],1);
+					}
+				}
+			}
+		}
+		else if (NLep1==3&&NLep2==1)
+		{
+			vector<TLorentzVector> P4plus;
+			vector<TLorentzVector> P4minus;
+			vector<int> iLepPlus;
+			vector<int> iLepMinus;
+			for (int iLep1 = 0; iLep1 < NLep1; ++iLep1)
+			{
+				if (((Electron *)CandidatesArrayLepEle->At(iLep1))->Charge > 0)
+				{
+					P4plus.push_back(((Electron *)CandidatesArrayLepEle->At(iLep1))->P4());
+					iLepPlus.push_back(iLep1);
+				}
+				else if (((Electron *)CandidatesArrayLepEle->At(iLep1))->Charge < 0)
+				{
+					P4minus.push_back(((Electron *)CandidatesArrayLepEle->At(iLep1))->P4());
+					iLepMinus.push_back(iLep1);
+				}
+				else
+				{
+					cout<<"Some Stupid Wrong in BasicCuts for Z-Candidates Finding!"<<endl;
+				}
+			}
+			if (P4plus.size()==1)
+			{
+				double tempdelta=1000000;
+				int tempilep=999;
+				TLorentzVector Pll;
+				for (int iminus = 0; iminus < P4minus.size(); ++iminus)
+				{
+					Pll = P4plus[0]+P4minus[iminus];
+					if(fabs(Pll.M()-91.188)<tempdelta)
+					{
+						tempdelta=fabs(Pll.M()-91.188);
+						tempilep=iminus;
+					}
+				}
+				if (tempilep!=999&&tempdelta<10)
+				{
+					tempNZ+=1;
+					ZLepInfo.Insert(iLepPlus[0],iLepMinus[tempilep],0);
+				}
+			}
+			else if (P4minus.size()==1)
+			{
+				double tempdelta=1000000;
+				int tempilep=999;
+				TLorentzVector Pll;
+				for (int iplus = 0; iplus < P4plus.size(); ++iplus)
+				{
+					Pll = P4minus[0]+P4plus[iplus];
+					if(fabs(Pll.M()-91.188)<tempdelta)
+					{
+						tempdelta=fabs(Pll.M()-91.188);
+						tempilep=iplus;
+					}
+				}
+				if (tempilep!=999&&tempdelta<10)
+				{
+					tempNZ+=1;
+					ZLepInfo.Insert(iLepPlus[tempilep],iLepMinus[0],0);
+				}
+			}
+			else
+			{
+				tempNZ=0;
+			}
+		}
+		else if (NLep1==1&&NLep2==3)
+		{
+			vector<TLorentzVector> P4plus;
+			vector<TLorentzVector> P4minus;
+			vector<int> iLepPlus;
+			vector<int> iLepMinus;
+			for (int iLep1 = 0; iLep1 < NLep1; ++iLep1)
+			{
+				if (((Muon *)CandidatesArrayLepMuon->At(iLep1))->Charge > 0)
+				{
+					P4plus.push_back(((Muon *)CandidatesArrayLepMuon->At(iLep1))->P4());
+					iLepPlus.push_back(iLep1);
+				}
+				else if (((Muon *)CandidatesArrayLepMuon->At(iLep1))->Charge < 0)
+				{
+					P4minus.push_back(((Muon *)CandidatesArrayLepMuon->At(iLep1))->P4());
+					iLepMinus.push_back(iLep1);
+				}
+				else
+				{
+					cout<<"Some Stupid Wrong in BasicCuts for Z-Candidates Finding!"<<endl;
+				}
+			}
+			if (P4plus.size()==1)
+			{
+				double tempdelta=1000000;
+				int tempilep=999;
+				TLorentzVector Pll;
+				for (int iminus = 0; iminus < P4minus.size(); ++iminus)
+				{
+					Pll = P4plus[0]+P4minus[iminus];
+					if(fabs(Pll.M()-91.188)<tempdelta)
+					{
+						tempdelta=fabs(Pll.M()-91.188);
+						tempilep=iminus;
+					}
+				}
+				if (tempilep!=999&&tempdelta<10)
+				{
+					tempNZ+=1;
+					ZLepInfo.Insert(iLepPlus[0],iLepMinus[tempilep],1);
+				}
+			}
+			else if (P4minus.size()==1)
+			{
+				double tempdelta=1000000;
+				int tempilep=999;
+				TLorentzVector Pll;
+				for (int iplus = 0; iplus < P4plus.size(); ++iplus)
+				{
+					Pll = P4minus[0]+P4plus[iplus];
+					if(fabs(Pll.M()-91.188)<tempdelta)
+					{
+						tempdelta=fabs(Pll.M()-91.188);
+						tempilep=iplus;
+					}
+				}
+				if (tempilep!=999&&tempdelta<10)
+				{
+					tempNZ+=1;
+					ZLepInfo.Insert(iLepPlus[tempilep],iLepMinus[0],1);
+				}
+			}
+			else
+			{
+				tempNZ=0;
+			}
+		}
+		else if (NLep1==2&&NLep2==2)
+		{
+			TLorentzVector Pll1;
+			for (int iLep1 = 0; iLep1 < NLep1; ++iLep1)
+			{
+				totCharge *= ((Electron *)CandidatesArrayLepEle->At(iLep1))->Charge;
+				Pll1 += ((Electron *)CandidatesArrayLepEle->At(iLep1))->P4();
+			}
+			if (totCharge==-1&&(fabs(Pll1.M()-91.188)<10))
+			{
+				tempNZ+=1;
+				ZLepInfo.Insert(0,1,0);
+			}
+			TLorentzVector Pll2;
+			for (int iLep2 = 0; iLep2 < NLep2; ++iLep2)
+			{
+				totCharge *= ((Muon *)CandidatesArrayLepMuon->At(iLep2))->Charge;
+				Pll2 += ((Muon *)CandidatesArrayLepMuon->At(iLep2))->P4();
+			}
+			if (totCharge==-1&&(fabs(Pll2.M()-91.188)<10))
+			{
+				tempNZ+=1;
+				ZLepInfo.Insert(0,1,1);
+			}
+		}
+
+		if (tempNZ!=NLepNZ[1])
+		{
+			return false;
+		}
 	}
 	return true;
 }

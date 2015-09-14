@@ -10,7 +10,7 @@ Basic Cuts:
     dRJL 0.4
     dRLL 0.4
     dPhiJMET 0.8 0.8
-    NLep&&Sign 1 1
+    NLep&&NZ 1 1 10 ## Number_of_Leps Number_of_Z_Candidates
 }
 
 Advanced Cuts:

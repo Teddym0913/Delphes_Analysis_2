@@ -7,6 +7,24 @@
 #include "TClonesArray.h"
 
 using namespace std;
+class ZCandidatesInfo
+{
+public:
+	ZCandidatesInfo();
+	~ZCandidatesInfo();
+
+	void Reset();
+	void Insert(int,int,int);
+	int GetNZ();
+	int GetZLepInfo1(int);
+	int GetZLepInfo2(int);
+
+private:
+	int NZ;
+	vector<int> LepFlavor;
+	vector<int> Lep1;
+	vector<int> Lep2;
+};
 
 class BasicCuts
 {
@@ -14,15 +32,15 @@ public:
 	BasicCuts(const char *config="./config/Cuts_card.dat");
 	~BasicCuts();
 	bool process();
-
 	void GetBranch(TreeReader *);
+	ZCandidatesInfo ZLepInfo;
 
 private:
 	vector<double> JetPTmin;
 	vector<double> RJetPTmin;
 	vector<double> BJetPTmin;
 	vector<double> LepPTmin;
-	int NLepSign[2];
+	int NLepNZ[2];
 	double EtamaxJet;
 	double EtamaxLep;
 	double dRJJ;
@@ -40,7 +58,7 @@ private:
 	void BasicdREle(TClonesArray*,TClonesArray*,double);
 	void BasicdRMuon(TClonesArray*,TClonesArray*,double);
 	bool BasicdPhi(TClonesArray*,const TClonesArray*,const double*);
-	bool BasicNLepSign(TClonesArray*, TClonesArray*, const int*, vector<double>);
+	bool BasicNLepNZ(TClonesArray*, TClonesArray*, const int*, vector<double>);
 
 	TreeReader::TBranchArray::iterator iteBranchJet;
 	TreeReader::TBranchArray::iterator iteBranchEle;
