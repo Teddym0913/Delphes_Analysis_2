@@ -3,3 +3,4 @@
 *.root
 *.dat
 Delphes_Analysis
+.DS_Store

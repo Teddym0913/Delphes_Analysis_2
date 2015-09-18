@@ -2,7 +2,7 @@
 #define EachEvent_h
 
 #include "TreeReader.h"
-#include "BasicCuts.h"
+//#include "BasicCuts.h"
 #include "modules/Delphes.h"
 #include "classes/DelphesClasses.h"
 #include "classes/DelphesFactory.h"
@@ -36,7 +36,7 @@ private:
 	TreeReader::TBranchArray::iterator iteMuon; //! Muon iterator
 	TreeReader::TBranchArray::iterator iteMET; //! MET iterator
 	TreeReader::TBranchArray::iterator iteEvent; //! Event iterator
-	BasicCuts *MyBasicCuts;
+//	BasicCuts *MyBasicCuts;
 
 
 public:

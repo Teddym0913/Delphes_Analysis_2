@@ -4,27 +4,10 @@
 #include <vector>
 #include <fstream>
 #include "TreeReader.h"
+#include "LepSys.h"
 #include "TClonesArray.h"
 
 using namespace std;
-class ZCandidatesInfo
-{
-public:
-	ZCandidatesInfo();
-	~ZCandidatesInfo();
-
-	void Reset();
-	void Insert(int,int,int);
-	int GetNZ();
-	int GetZLepInfo1(int);
-	int GetZLepInfo2(int);
-
-private:
-	int NZ;
-	vector<int> LepFlavor;
-	vector<int> Lep1;
-	vector<int> Lep2;
-};
 
 class BasicCuts
 {
@@ -33,7 +16,8 @@ public:
 	~BasicCuts();
 	bool process();
 	void GetBranch(TreeReader *);
-	ZCandidatesInfo ZLepInfo;
+//	ZCandidatesInfo ZLepInfo;
+	LepSysInfo ZLepInfo;
 
 private:
 	vector<double> JetPTmin;
@@ -47,6 +31,12 @@ private:
 	double dRJL;
 	double dRLL;
 	double dPhiJMET[2];
+	int SS;
+	int OS;
+	int SSSF;
+	int SSOF;
+	int OSSF;
+	int OSOF;
 
 	void BasicJetPTminEtamax(TClonesArray *,double,double);
 	void BasicElePTminEtamax(TClonesArray *,double,double);

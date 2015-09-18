@@ -19,17 +19,22 @@ EXTRAHDR =
 ARCH          = linux
 #ARCH          = solarisCC5
 
+#DELPHESPATH := /Users/teddy/workingspace/MC-Package/MG5_aMC_v2_1_2/Delphes
+
+#MT2PATH := /Users/teddy/workingspace/Useful-Package/MT2 
+
 ROOTCFLAGS   := $(shell root-config --cflags)
 ROOTLIBS     := $(shell root-config --libs)
 ROOTGLIBS    := $(shell root-config --glibs)
 
-DELPHESCFLAGS := -I/home/teddy/workingspace/MC-Package/MG5_aMC_v2_2_1/Delphes -I/home/teddy/workingspace/MC-Package/MG5_aMC_v2_2_1/Delphes/external
-DELPHESLIBS  := -L/home/teddy/workingspace/MC-Package/MG5_aMC_v2_2_1/Delphes -lDelphes
+DELPHESCFLAGS := -I/Users/teddy/workingspace/MC-package/MG5_aMC_v2_1_2/Delphes/ -I/Users/teddy/workingspace/MC-package/MG5_aMC_v2_1_2/Delphes/external
+DELPHESLIBS  := -L/Users/teddy/workingspace/MC-package/MG5_aMC_v2_1_2/Delphes/ -lDelphes
+DELPHESSPECIAL := -Xlinker -rpath /Users/teddy/workingspace/MC-package/MG5_aMC_v2_1_2/Delphes/
 
-MT2CFLAGS := -I/home/teddy/workingspace/Useful-Package/MT2_Variable/include/oxbridgekinetics-1.0
-MT2LIBS := -L/home/teddy/workingspace/Useful-Package/MT2_Variable/lib/ -loxbridgekinetics-1.0
-MT2GLIBS := -L/home/teddy/workingspace/Useful-Package/MT2_Variable/lib/ -loxbridgekinetics-1.0
-MT2SPECIAL := -Xlinker -rpath /home/teddy/workingspace/Useful-Package/MT2_Variable/lib/
+MT2CFLAGS := -I/Users/teddy/workingspace/Useful-Package/MT2/include/oxbridgekinetics-1.0
+MT2LIBS := -L/Users/teddy/workingspace/Useful-Package/MT2/lib/ -loxbridgekinetics-1.0
+MT2GLIBS := -L/Users/teddy/workingspace/Useful-Package/MT2/lib/ -loxbridgekinetics-1.0
+MT2SPECIAL := -Xlinker -rpath /Users/teddy/workingspace/Useful-Package/MT2/lib/
 
 
 #INCDIRS	+= $(EXTRAHDR)
@@ -69,7 +74,7 @@ OBJS          = $(OBJ) $(ObjDir)/EachEventDef.$(ObjSuf) $(ObjDir)/TreeReaderDef.
 
 #------------------------------------------------------------------------------
 $(Target):	$(OBJS) $(Mainfile)
-		@$(LD) $(LDFLAGS) $(CXXFLAGS) $(Mainfile) -o $@ -L./ $(OBJS) $(GLIBS) $(LIBS) $(MT2SPECIAL)
+		@$(LD) $(LDFLAGS) $(CXXFLAGS) $(Mainfile) -o $@ -L./ $(OBJS) $(GLIBS) $(LIBS) $(MT2SPECIAL) $(DELPHESSPECIAL)
 		@echo "--->$@ done"
 
 $(ObjDir)/%.$(ObjSuf):$(SrcDir)/%.$(SrcSuf)
