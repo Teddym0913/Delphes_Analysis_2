@@ -5,6 +5,7 @@ AdvancedCuts::AdvancedCuts(const char *configfile)
 {
 	ifstream config(configfile,ios::in);
 	string tag,tag_inner,cName;
+	int tempcuts;
 	while(config)
 	{
 		config>>tag;
@@ -20,8 +21,15 @@ AdvancedCuts::AdvancedCuts(const char *configfile)
 					config.ignore(999,'\n');
 					for (int i = 0; i < NCuts; ++i)
 					{
-                        double *CutsInfo = new double[3];
-						config>>cName>>CutsInfo[0]>>CutsInfo[1]>>CutsInfo[2];
+                        int NFollow;
+						//config>>cName>>CutsInfo[0]>>CutsInfo[1]>>CutsInfo[2];
+						config>>cName>>NFollow;
+						vector<double> CutsInfo;
+						for (int iFollow = 0; iFollow < NFollow; ++iFollow)
+						{
+							config>>tempcuts;
+							CutsInfo.push_back(tempcuts);
+						}
 						config.ignore(999,'\n');
 						MyAdCuts.push_back(make_pair(cName,CutsInfo));
                         //MyAdCuts.insert(make_pair(cName,CutsInfo));

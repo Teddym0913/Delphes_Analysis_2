@@ -16,7 +16,7 @@ public:
 	~AdvancedCuts();
 
 	// typedef map<string,double*> TAdvancedCuts;
-	typedef vector<pair<string,double*> > TAdvancedCuts;
+	typedef vector<pair<string,vector<double> > > TAdvancedCuts;
 	TAdvancedCuts MyAdCuts;
 //	map<string,double*> MyAdCuts;
 

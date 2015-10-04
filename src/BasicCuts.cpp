@@ -13,6 +13,12 @@ BasicCuts::BasicCuts(const char *configfile)
 	string tag,tag_inner,NameCate;
 	int Num;
 	double PTmin;
+	SS=-1;
+	OS=-1;
+	SSSF=-1;
+	SSOF=-1;
+	OSSF=-1;
+	OSOF=-1;
 	while(config)
 	{
 		config>>tag;
@@ -204,11 +210,11 @@ bool BasicCuts::BasicLeadingPT(TClonesArray *CandidatesArray, vector<double> PTm
 
 bool BasicCuts::BasicLeadingPT(TClonesArray *CandidatesArray, vector<double> PTRJetmin, vector<double> PTBJetmin)
 {
-	int NCandidatesRJetMin = PTRJetmin.size();
+	//int NCandidatesRJetMin = PTRJetmin.size();
 	int NCandidatesBJetMin = PTBJetmin.size();
 	int NCandidatesArray = CandidatesArray->GetEntriesFast();
 	//if(NCandidatesArray<NCandidatesMin) return false;
-	int NRJetReal = 0;
+	//int NRJetReal = 0;
 	int NBJetReal = 0;
 	bool isBjet = 0;
 	// Make Sure the PT of those Leading Jets are satisfied.
@@ -224,15 +230,15 @@ bool BasicCuts::BasicLeadingPT(TClonesArray *CandidatesArray, vector<double> PTR
 			if(((Jet *)CandidatesArray->At(i))->PT<PTBJetmin[NBJetReal]) return false;
 			NBJetReal++;
 		}
-		else
-		{
-			if (NRJetReal>=NCandidatesRJetMin)
-			{
-				continue;
-			}
-			if(((Jet *)CandidatesArray->At(i))->PT<PTRJetmin[NRJetReal]) return false;
-			NRJetReal++;
-		}		      
+		// else
+		// {
+		// 	if (NRJetReal>=NCandidatesRJetMin)
+		// 	{
+		// 		continue;
+		// 	}
+		// 	if(((Jet *)CandidatesArray->At(i))->PT<PTRJetmin[NRJetReal]) return false;
+		// 	NRJetReal++;
+		// }		      
 	}
 	if (/*NRJetReal<NCandidatesRJetMin||*/NBJetReal<NCandidatesBJetMin)
 	{

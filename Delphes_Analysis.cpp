@@ -23,7 +23,7 @@ void BasicCutsOutput(string proName, string proPath,string outdir,string control
 	}
 	else if (control=="single")
 	{
-		rootFiles = proPath+"/"+proName+".root";
+		rootFiles = proPath+"/"+proName+"*.root";
 	}
 
 	chain->Add(rootFiles.c_str());
@@ -69,16 +69,44 @@ void BasicCutsOutput(string proName, string proPath,string outdir,string control
 	delete chain;
 	delete reader;
 }
-inline void cycle(int n,int NCuts,double *param, AdvancedCuts *adcuts,TTree* Tbas,int Ntotal,double cs,ofstream &outfile)
+inline void cycle(int n,int NCuts,int *param, AdvancedCuts *adcuts,TTree* Tbas,int Ntotal,double cs,ofstream &outfile)
 {
 	if (n==0)
 	{
 		cout<<"False in AdvancedCuts Cycle!"<<endl;
 		return;
 	}
-   for (param[NCuts-n] = (adcuts->MyAdCuts[NCuts-n].second)[0]; param[NCuts-n] <= (adcuts->MyAdCuts[NCuts-n].second)[1]; param[NCuts-n]+=(adcuts->MyAdCuts[NCuts-n].second)[2])
+   // for (param[NCuts-n] = (adcuts->MyAdCuts[NCuts-n].second)[0]; param[NCuts-n] <= (adcuts->MyAdCuts[NCuts-n].second)[1]; param[NCuts-n]+=(adcuts->MyAdCuts[NCuts-n].second)[2])
+   // {
+   // 		if (n>1)
+   // 		{
+   // 			cycle(n-1,NCuts,param,adcuts,Tbas,Ntotal,cs,outfile);
+   // 		}
+   // 		else
+   // 		{
+   // 			stringstream cuts;
+   // 			string Scuts;
+   // 			double GetCounts=0;
+   // 			cuts<<"Weight*(";
+   // 			for (int i = 0; i < NCuts; ++i)
+   // 			{
+   // 				outfile<<adcuts->MyAdCuts[i].first<<">="<<param[i]<<":";
+   // 				cuts<<adcuts->MyAdCuts[i].first<<">="<<param[i]<<"&&";
+   // 			}
+   // 			cuts<<"1==1)";
+   // 			cuts>>Scuts;
+   // 			Tbas->Draw("NBjets>>Count(10,0,10)",Scuts.c_str());
+   // 			gPad->Update();
+   // 			TH1F *htemp = (TH1F*) gPad->GetPrimitive("Count");
+   // 			GetCounts=htemp->Integral();
+   // 			//cout<<GetCounts<<"  "<<Ntotal<<endl;
+   // 			outfile<<"    "<<GetCounts*cs/Ntotal<<endl;
+   // 		}
+   // }
+
+   for (param[NCuts-n] = 0; param[NCuts-n] < adcuts->MyAdCuts[NCuts-n].second.size(); ++param[NCuts-n])
    {
-   		if (n>1)
+ 		if (n>1)
    		{
    			cycle(n-1,NCuts,param,adcuts,Tbas,Ntotal,cs,outfile);
    		}
@@ -90,8 +118,20 @@ inline void cycle(int n,int NCuts,double *param, AdvancedCuts *adcuts,TTree* Tba
    			cuts<<"Weight*(";
    			for (int i = 0; i < NCuts; ++i)
    			{
-   				outfile<<adcuts->MyAdCuts[i].first<<">="<<param[i]<<":";
-   				cuts<<adcuts->MyAdCuts[i].first<<">="<<param[i]<<"&&";
+   				if (param[i]==(adcuts->MyAdCuts[i].second.size()-1))
+   				{
+   					outfile<<(adcuts->MyAdCuts[i].second)[param[i]]<<"<="<<adcuts->MyAdCuts[i].first<<":";
+   					cuts<<(adcuts->MyAdCuts[i].second)[param[i]]<<"<="<<adcuts->MyAdCuts[i].first<<"&&";
+   				}
+   				else if (param[i]<(adcuts->MyAdCuts[i].second.size()-1))
+   				{
+	   				outfile<<(adcuts->MyAdCuts[i].second)[param[i]]<<"<="<<adcuts->MyAdCuts[i].first<<"<="<<(adcuts->MyAdCuts[i].second)[param[i]+1]<<":";
+	   				cuts<<(adcuts->MyAdCuts[i].second)[param[i]]<<"<="<<adcuts->MyAdCuts[i].first<<"&&"<<adcuts->MyAdCuts[i].first<<"<="<<(adcuts->MyAdCuts[i].second)[param[i]+1]<<"&&";
+	   			}
+	   			else
+	   			{
+	   				cout<<"Something Wrong in Cycle!"<<endl;
+	   			}
    			}
    			cuts<<"1==1)";
    			cuts>>Scuts;
@@ -128,7 +168,7 @@ void AdvancedCutsOutput(string proName, string proPath, string outdir, double cs
 
 	//string *Branchs = new string[ncuts];
 	double *VariableValue = new double[ncuts];
-	double *param = new double[ncuts];
+	int *param = new int[ncuts];
 	//double Weight;
 	EachEvent *event = new EachEvent();
 	t1->SetBranchAddress("event",&event);
@@ -326,7 +366,8 @@ int main(int argc, char const *argv[])
 {
 	//background_BasicLoop("./config/background_loop");	
 	//signal_BasicLoop("./config/signal_loop");
-	background_AdvancedLoop("./config/background_loop");
+	signal_AdvancedLoop("./config/signal_loop");
+	//background_AdvancedLoop("./config/background_loop");
 	//BasicCutsOutput("BenchmarkPoint_150_650","/home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background","/home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background","single");
 
 	return 0;

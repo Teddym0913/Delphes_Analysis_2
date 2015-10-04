@@ -40,11 +40,11 @@ void EachEvent::SetData()
 	NBjets=Get_NBjets();
 	NJets=Get_NJetsTot();//-NBjets;
 	MET=Get_MET();
-	dMLL=0;
+	//dMLL=0;
 	HT=Get_HT();
-	Meff=Get_Meff();
-	MT=Get_MT();
-	MT2=0;
+	//Meff=Get_Meff();
+	//MT=Get_MT();
+	//MT2=0;
 }
 
 double EachEvent::Get_Weight()
