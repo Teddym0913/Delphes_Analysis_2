@@ -130,7 +130,7 @@ double EachEvent::Get_MT(LepSysInfo ZLepInfo)
 	}
 	else if (NUnpairEplus!=0&&NUnpairEminus!=0)
 	{
-		IndexEtemp = GetIndex_Unpair_eminus(0)<GetIndex_Unpair_eplus(0)?GetIndex_Unpair_eminus(0):GetIndex_Unpair_eplus(0);
+		IndexEtemp = ZLepInfo.GetIndex_Unpair_eminus(0)<ZLepInfo.GetIndex_Unpair_eplus(0)?ZLepInfo.GetIndex_Unpair_eminus(0):ZLepInfo.GetIndex_Unpair_eplus(0);
 	}
 
 	if (NUnpairMuplus==0&&NUnpairMuminus!=0)
@@ -143,7 +143,7 @@ double EachEvent::Get_MT(LepSysInfo ZLepInfo)
 	}
 	else if (NUnpairMuplus!=0&&NUnpairMuminus!=0)
 	{
-		IndexMutemp = GetIndex_Unpair_muminus(0)<GetIndex_Unpair_muplus(0)?GetIndex_Unpair_muminus(0):GetIndex_Unpair_muplus(0);
+		IndexMutemp = ZLepInfo.GetIndex_Unpair_muminus(0)<ZLepInfo.GetIndex_Unpair_muplus(0)?ZLepInfo.GetIndex_Unpair_muminus(0):ZLepInfo.GetIndex_Unpair_muplus(0);
 	}
 
 	if (IndexEtemp!=999&&IndexMutemp==999)

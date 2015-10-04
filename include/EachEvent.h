@@ -49,7 +49,7 @@ public:
 	double Get_MET();
 	double Get_HT();
 	double Get_Meff();
-	double Get_MT();
+	double Get_MT(LepSysInfo );
 	double Get_dMLL();
 	double Get_MT2();
 	int Get_NJetsTot();
