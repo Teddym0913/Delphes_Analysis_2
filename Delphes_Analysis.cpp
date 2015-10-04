@@ -58,7 +58,7 @@ void BasicCutsOutput(string proName, string proPath,string outdir,string control
 		if(good) 
 		{
 			left++;
-	    	event->SetData();
+	    	event->SetData(MyBasic->ZLepInfo);
 	 		t1->Fill();
 	 	}
  	}

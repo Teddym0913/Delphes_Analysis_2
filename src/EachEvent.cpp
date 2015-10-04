@@ -34,7 +34,7 @@ void EachEvent::SetSource(TreeReader* reader)
 	Ntotal = reader->reader->GetEntries();
 }
 
-void EachEvent::SetData()
+void EachEvent::SetData(LepSysInfo ZLepInfo)
 {
 	Weight=Get_Weight();
 	NBjets=Get_NBjets();
@@ -43,7 +43,7 @@ void EachEvent::SetData()
 	dMLL=0;
 	HT=Get_HT();
 	Meff=Get_Meff();
-	MT=Get_MT();
+	MT=Get_MT(ZLepInfo);
 	MT2=0;
 }
 
@@ -104,30 +104,133 @@ double EachEvent::Get_Meff()
 	return Mefftemp;
 }
 
-double EachEvent::Get_MT()
+double EachEvent::Get_MT(LepSysInfo ZLepInfo)
 {
 	double METtemp=((MissingET*)iteMET->second->At(0))->MET;
 	double METphitemp=((MissingET*)iteMET->second->At(0))->Phi;
 
 	double LepPT=0.0;
 	double LepPhi=0.0;
+	// The Following algorithm need to be improved! 
+	int NUnpairEplus = ZLepInfo.GetN_UnPair_eplus();
+	int NUnpairEminus = ZLepInfo.GetN_UnPair_eminus();
+	int NUnpairMuplus = ZLepInfo.GetN_Unpair_muplus();
+	int NUnpairMuminus = ZLepInfo.GetN_Unpair_muminus();
 
-	int Neles = (iteEle->second->GetEntriesFast());
-	int Nmuons = (iteMuon->second->GetEntriesFast());
-	if(Neles!=0&&Nmuons==0)
+	int IndexEtemp=999;
+	int IndexMutemp=999;
+
+	if (NUnpairEplus==0&&NUnpairEminus!=0)
 	{
-		LepPT=((Electron*)iteEle->second->At(0))->PT;
-		LepPhi=((Electron*)iteEle->second->At(0))->Phi;
+		IndexEtemp = ZLepInfo.GetIndex_Unpair_eminus(0);
 	}
-	else if(Nmuons!=0&&Neles==0)
+	else if (NUnpairEplus!=0&&NUnpairEminus==0)
 	{
-		LepPT=((Muon*)iteMuon->second->At(0))->PT;
-		LepPhi=((Muon*)iteMuon->second->At(0))->Phi;
+		IndexEtemp = ZLepInfo.GetIndex_Unpair_eplus(0);
+	}
+	else if (NUnpairEplus!=0&&NUnpairEminus!=0)
+	{
+		IndexEtemp = GetIndex_Unpair_eminus(0)<GetIndex_Unpair_eplus(0)?GetIndex_Unpair_eminus(0):GetIndex_Unpair_eplus(0);
+	}
+
+	if (NUnpairMuplus==0&&NUnpairMuminus!=0)
+	{
+		IndexMutemp = ZLepInfo.GetIndex_Unpair_muminus(0);
+	}
+	else if (NUnpairMuplus!=0&&NUnpairMuminus==0)
+	{
+		IndexMutemp = ZLepInfo.GetIndex_Unpair_muplus(0);
+	}
+	else if (NUnpairMuplus!=0&&NUnpairMuminus!=0)
+	{
+		IndexMutemp = GetIndex_Unpair_muminus(0)<GetIndex_Unpair_muplus(0)?GetIndex_Unpair_muminus(0):GetIndex_Unpair_muplus(0);
+	}
+
+	if (IndexEtemp!=999&&IndexMutemp==999)
+	{
+		LepPT = ((Electron*)iteEle->second->At(IndexEtemp))->PT;
+		LepPhi = ((Electron*)iteElec->second->At(IndexEtemp))->Phi;
+	}
+	else if (IndexEtemp==999&&IndexMutemp!=999)
+	{
+		LepPT = ((Muon*)iteMuon->second->At(IndexMutemp))->PT;
+		LepPhi = ((Muon*)iteMuon->second->At(IndexMutemp))->Phi;
+	}
+	else if (IndexEtemp!=999&&IndexMutemp!=999)
+	{
+		double ePT = ((Electron*)iteEle->second->At(IndexEtemp))->PT;
+		double muPT = ((Muon*)iteMuon->second->At(IndexMutemp))->PT;
+		double ePhi = ((Electron*)iteElec->second->At(IndexEtemp))->Phi;
+		double muPhi = ((Muon*)iteMuon->second->At(IndexMutemp))->Phi;
+		if (ePT>muPT)
+		{
+			LepPT = ePT;
+			LepPhi = ePhi;
+		}
+		else
+		{
+			LepPT = muPT;
+			LepPhi = muPhi;
+		}
 	}
 	else
 	{
-		cout<<"In EachEvent MT(), there may be some problems!"<<endl;
+		cout<<"There is something wrong in Lepton System!"<<endl;
+		cout<<"No Unpaired Lepton"<<endl;
 	}
+	// if (NUnpairEplus+NUnpairEminus!=0&&NUnpairMuplus+NUnpairMuminus==0)
+	// {
+	// 	if (NUnpairEplus==0)
+	// 	{
+	// 		LepPT=((Electron*)iteEle->second->At(GetIndex_Unpair_eminus(0)))->PT;
+	// 		LepPhi=((Electron*)iteEle->second->At(GetIndex_Unpair_eminus(0)))->Phi;
+	// 	}
+	// 	else if (NUnpairEminus==0)
+	// 	{
+	// 		LepPT=((Electron*)iteEle->second->At(GetIndex_Unpair_eplus(0)))->PT;
+	// 		LepPhi=((Electron*)iteEle->second->At(GetIndex_Unpair_eplus(0)))->Phi;
+	// 	}
+	// 	else
+	// 	{
+	// 		int Indextemp = GetIndex_Unpair_eplus(0)<GetIndex_Unpair_eminus(0)?GetIndex_Unpair_eplus(0):GetIndex_Unpair_eminus(0);
+	// 		LepPT=((Electron*)iteEle->second->At(Indextemp))->PT;
+	// 		LepPhi=((Electron*)iteEle->second->At(Indextemp))->Phi;
+	// 	}
+	// }
+	// else if (NUnpairMuminus+NUnpairMuplus!=0&&NUnpairEplus+NUnpairEminus==0)
+	// {
+	// 	if (NUnpairMuplus==0)
+	// 	{
+	// 		LepPT=((Muon*)iteMuon->second->At(GetIndex_Unpair_muminus(0)))->PT;
+	// 		LepPhi=((Muon*)iteMuon->second->At(GetIndex_Unpair_muminus(0)))->Phi;
+	// 	}
+	// 	else if (NUnpairMuminus==0)
+	// 	{
+	// 		LepPT=((Muon*)iteMuon->second->At(GetIndex_Unpair_muplus(0)))->PT;
+	// 		LepPhi=((Muon*)iteMuon->second->At(GetIndex_Unpair_muplus(0)))->Phi;
+	// 	}
+	// 	else
+	// 	{
+	// 		int Indextemp = 
+	// 	}
+	// }
+
+	// int Neles = (iteEle->second->GetEntriesFast());
+	// int Nmuons = (iteMuon->second->GetEntriesFast());
+	// if(Neles!=0&&Nmuons==0)
+	// {
+	// 	LepPT=((Electron*)iteEle->second->At(0))->PT;
+	// 	LepPhi=((Electron*)iteEle->second->At(0))->Phi;
+	// }
+	// else if(Nmuons!=0&&Neles==0)
+	// {
+	// 	LepPT=((Muon*)iteMuon->second->At(0))->PT;
+	// 	LepPhi=((Muon*)iteMuon->second->At(0))->Phi;
+	// }
+	// else
+	// {
+	// 	cout<<"In EachEvent MT(), there may be some problems!"<<endl;
+	// }
 	double MT;
 	MT=sqrt(2*LepPT*METtemp*(1-cos(LepPhi-METphitemp)));
 	return MT;

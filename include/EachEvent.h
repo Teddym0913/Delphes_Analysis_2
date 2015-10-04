@@ -2,7 +2,7 @@
 #define EachEvent_h
 
 #include "TreeReader.h"
-//#include "BasicCuts.h"
+#include "LepSys.h"
 #include "modules/Delphes.h"
 #include "classes/DelphesClasses.h"
 #include "classes/DelphesFactory.h"
@@ -41,7 +41,7 @@ private:
 
 public:
 	void SetSource(TreeReader *);
-	void SetData();
+	void SetData(LepSysInfo );
 	void SetMT2LorentzVector(TLorentzVector&, TLorentzVector&);
 //    Advanced_Data *Advanced_Data
 
