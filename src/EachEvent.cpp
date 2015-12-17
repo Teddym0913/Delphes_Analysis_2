@@ -149,7 +149,7 @@ double EachEvent::Get_MT(LepSysInfo ZLepInfo)
 	if (IndexEtemp!=999&&IndexMutemp==999)
 	{
 		LepPT = ((Electron*)iteEle->second->At(IndexEtemp))->PT;
-		LepPhi = ((Electron*)iteElec->second->At(IndexEtemp))->Phi;
+		LepPhi = ((Electron*)iteEle->second->At(IndexEtemp))->Phi;
 	}
 	else if (IndexEtemp==999&&IndexMutemp!=999)
 	{
@@ -160,7 +160,7 @@ double EachEvent::Get_MT(LepSysInfo ZLepInfo)
 	{
 		double ePT = ((Electron*)iteEle->second->At(IndexEtemp))->PT;
 		double muPT = ((Muon*)iteMuon->second->At(IndexMutemp))->PT;
-		double ePhi = ((Electron*)iteElec->second->At(IndexEtemp))->Phi;
+		double ePhi = ((Electron*)iteEle->second->At(IndexEtemp))->Phi;
 		double muPhi = ((Muon*)iteMuon->second->At(IndexMutemp))->Phi;
 		if (ePT>muPT)
 		{

@@ -23,7 +23,7 @@ void BasicCutsOutput(string proName, string proPath,string outdir,string control
 	}
 	else if (control=="single")
 	{
-		rootFiles = proPath+"/"+proName+".root";
+		rootFiles = proPath+"/"+proName+"*.root";
 	}
 
 	chain->Add(rootFiles.c_str());
@@ -100,7 +100,8 @@ inline void cycle(int n,int NCuts,double *param, AdvancedCuts *adcuts,TTree* Tba
    			TH1F *htemp = (TH1F*) gPad->GetPrimitive("Count");
    			GetCounts=htemp->Integral();
    			//cout<<GetCounts<<"  "<<Ntotal<<endl;
-   			outfile<<"    "<<GetCounts*cs/Ntotal<<endl;
+   			//outfile<<"    "<<GetCounts*cs/Ntotal<<endl;
+   			outfile<<"    "<<"Counts_Left  Ntotal  cs: "<<GetCounts<<" "<<Ntotal<<" "<<cs<<endl;
    		}
    }
 }

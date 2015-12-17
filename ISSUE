@@ -1,2 +1,3 @@
 ISSUE01: 改进读取Cuts Background-loop 以及 signal-loop的方法，使得中间插入的注释不影响读取
 ISSUE02: 根据Delphes的Makefile 修改一下这个项目的Makefile 使得在Mac OSX 上能顺利编译
+ISSUE03: 改进一下 Jet相关的算法，如何做Jet以及Bjet相关的 Basic Cuts
