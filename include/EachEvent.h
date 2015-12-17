@@ -22,7 +22,8 @@ public:
 	int Ntotal;
 	double Weight;
 	int NJets;
-	int NBjets;
+	int NBJets;
+	int NTauJets;
 	double HT;
 	double Meff;
 	double MT;

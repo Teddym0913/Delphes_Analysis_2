@@ -12,7 +12,8 @@ EachEvent::EachEvent()
 	Ntotal=0;
 	Weight=1;
 	NJets=0;
-	NBjets=0;
+	NBJets=0;
+	NTauJets=0;
 	MET=0;
 	dMLL=0;
 	HT=0;
