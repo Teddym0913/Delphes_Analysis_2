@@ -199,7 +199,7 @@ void LepSysInfo::SetInputArray(TClonesArray *CandidatesArrayLepEle, TClonesArray
         tempdelta=1000000;
         tempiminus=999;
         Pplus = ((Muon *)CandidatesArrayLepMuon->At(Index_Unpair_muplus[iMuplus]))->P4();
-        for (int iMuminus = 0; iMuminus < Index_Unpair_muminus.size(); )
+        for (int iMuminus = 0; iMuminus < Index_Unpair_muminus.size(); ++iMuminus )
         {
             Pll = Pplus + ((Muon *)CandidatesArrayLepMuon->At(Index_Unpair_muminus[iMuminus]))->P4();
             if (fabs(Pll.M()-91.188)<tempdelta)

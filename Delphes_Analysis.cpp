@@ -23,7 +23,7 @@ void BasicCutsOutput(string proName, string proPath,string outdir,string control
 	}
 	else if (control=="single")
 	{
-		rootFiles = proPath+"/"+proName+".root";
+		rootFiles = proPath+"/"+proName+"*.root";
 	}
 
 	chain->Add(rootFiles.c_str());
@@ -58,7 +58,7 @@ void BasicCutsOutput(string proName, string proPath,string outdir,string control
 		if(good) 
 		{
 			left++;
-	    	event->SetData(MyBasic->ZLepInfo);
+		    	event->SetData(MyBasic->ZLepInfo);
 	 		t1->Fill();
 	 	}
  	}
@@ -93,14 +93,15 @@ inline void cycle(int n,int NCuts,double *param, AdvancedCuts *adcuts,TTree* Tba
    				outfile<<adcuts->MyAdCuts[i].first<<">="<<param[i]<<":";
    				cuts<<adcuts->MyAdCuts[i].first<<">="<<param[i]<<"&&";
    			}
-   			cuts<<"1==1)";
+   			cuts<<"NJets<=1&&NBjets==0)";
    			cuts>>Scuts;
    			Tbas->Draw("NBjets>>Count(10,0,10)",Scuts.c_str());
    			gPad->Update();
    			TH1F *htemp = (TH1F*) gPad->GetPrimitive("Count");
    			GetCounts=htemp->Integral();
    			//cout<<GetCounts<<"  "<<Ntotal<<endl;
-   			outfile<<"    "<<GetCounts*cs/Ntotal<<endl;
+   			//outfile<<"    "<<GetCounts*cs/Ntotal<<endl;
+			outfile<<"    "<<"Counts_Left  Ntotal  cs: "<<GetCounts<<" "<<Ntotal<<" "<<cs<<endl;
    		}
    }
 }
@@ -327,6 +328,7 @@ int main(int argc, char const *argv[])
 	//background_BasicLoop("./config/background_loop");	
 	//signal_BasicLoop("./config/signal_loop");
 	background_AdvancedLoop("./config/background_loop");
+	signal_AdvancedLoop("./config/signal_loop");
 	//BasicCutsOutput("BenchmarkPoint_150_650","/home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background","/home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background","single");
 
 	return 0;

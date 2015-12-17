@@ -27,14 +27,14 @@ ROOTCFLAGS   := $(shell root-config --cflags)
 ROOTLIBS     := $(shell root-config --libs)
 ROOTGLIBS    := $(shell root-config --glibs)
 
-DELPHESCFLAGS := -I/Users/teddy/workingspace/MC-package/MG5_aMC_v2_1_2/Delphes/ -I/Users/teddy/workingspace/MC-package/MG5_aMC_v2_1_2/Delphes/external
-DELPHESLIBS  := -L/Users/teddy/workingspace/MC-package/MG5_aMC_v2_1_2/Delphes/ -lDelphes
-DELPHESSPECIAL := -Xlinker -rpath /Users/teddy/workingspace/MC-package/MG5_aMC_v2_1_2/Delphes/
+DELPHESCFLAGS := -I/home/thcollab/MC-Package/MG5_aMC_v2_1_2/Delphes/ -I/home/thcollab/MC-Package/MG5_aMC_v2_1_2/Delphes/external
+DELPHESLIBS  := -L/home/thcollab/MC-Package/MG5_aMC_v2_1_2/Delphes/ -lDelphes
+DELPHESSPECIAL := -Xlinker -rpath /home/thcollab/MC-Package/MG5_aMC_v2_1_2/Delphes/
 
-MT2CFLAGS := -I/Users/teddy/workingspace/Useful-Package/MT2/include/oxbridgekinetics-1.0
-MT2LIBS := -L/Users/teddy/workingspace/Useful-Package/MT2/lib/ -loxbridgekinetics-1.0
-MT2GLIBS := -L/Users/teddy/workingspace/Useful-Package/MT2/lib/ -loxbridgekinetics-1.0
-MT2SPECIAL := -Xlinker -rpath /Users/teddy/workingspace/Useful-Package/MT2/lib/
+MT2CFLAGS := -I/home/thcollab/MC-Package/Support-Package/MT2/include/oxbridgekinetics-1.0
+MT2LIBS := -L/home/thcollab/MC-Package/Support-Package/MT2/lib/ -loxbridgekinetics-1.0
+MT2GLIBS := -L/home/thcollab/MC-Package/Support-Package/MT2/lib/ -loxbridgekinetics-1.0
+MT2SPECIAL := -Xlinker -rpath /home/thcollab/MC-Package/Support-Package/MT2/lib/
 
 
 #INCDIRS	+= $(EXTRAHDR)

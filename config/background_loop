@@ -1,7 +1,13 @@
-OUTPUT_PATH: /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/Af_Advanced
+OUTPUT_PATH: /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Advanced
 # This file controls the loop over background
 # Number of Background
-NB 1
+NB 2
+BBB-4p 3 0-600 2570 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 600-1300 150 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 1300-100000 13 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic
+ttB-4p 4 0-900 2670 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 900-1600 250 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 1600-2500 24 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 2500-100000 2.1 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 
+
+BBB-4p 3 0-600 2570 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/BBB-4p/0-600/ 600-1300 150 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/BBB-4p/600-1300/ 1300-100000 13 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/BBB-4p/1300-100000/
+ttB-4p 4 0-900 2670 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/ttB-4p/0-900/ 900-1600 250 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/ttB-4p/900-1600/ 1600-2500 24 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/ttB-4p/1600-2500/ 2500-100000 2.1 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/ttB-4p/2500-100000 
+ 
 Bj_4p 7 0_300 34409920 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 300_600 2642850 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 600_1100 294120 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 1100_1800 25950 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 1800_2700 2420 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 2700_3700 230 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 3700_100000 28 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/ 
 ttbar 1 NO 261230 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/
 ttbb 1 NO 2330 1 /home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background/
