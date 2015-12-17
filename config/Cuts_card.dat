@@ -1,11 +1,11 @@
 Basic Cuts:
 {
-    PTmin Jets 2 0 30  ## PTmin Jets Num-of-Following-PT PT1 PT2 ... PTmin for all jets
-    PTmin RJets 1 0 ## PTmin RJets Num-of-Following-PT(also the min Num of RJets) PT1 PT2 ... PTmin for regular jets
-    PTmin BJets 1 30  ## PTmin BJets Num-of-Following-PT(also the min Num of BJets) PT1 PT2 ... PTmin for b-jets
-    PTmin Leps 3 20 10 10 ## PTmin Leps Num-of-Following-PT PT1 PT2 ... PTmin
-    Etamax Jet 2.5  
-    Etamax Lep 2.5
+    PTmin Jets 1 20  ## PTmin Jets Num-of-Following-PT PT1 PT2 ... PTmin for all jets
+    PTmin RJets 0 0 ## PTmin RJets Num-of-Following-PT(also the min Num of RJets) PT1 PT2 ... PTmin for regular jets
+    PTmin BJets 0 30  ## PTmin BJets Num-of-Following-PT(also the min Num of BJets) PT1 PT2 ... PTmin for b-jets
+    PTmin Leps 3 20 0 10 ## PTmin Leps Num-of-Following-PT PT1 PT2 ... PTmin
+    Etamax Jet 2.4  
+    Etamax Lep 2.4
     dRJJ 0.4
     dRJL 0.4
     dRLL 0.4
@@ -16,10 +16,10 @@ Basic Cuts:
 
 Advanced Cuts:
 {
-    NCuts  5
-    MET  100  200  20
+    NCuts  2
+    MET  100  300  20
+    MT   80  200  20
     HT  200  600  50
-    MT  100  200  20
     NJets  3  6  1
     NBjets 1  2  1
     dMLL  5  15  5
