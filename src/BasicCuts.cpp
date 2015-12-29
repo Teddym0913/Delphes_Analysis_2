@@ -63,6 +63,14 @@ BasicCuts::BasicCuts(const char *configfile)
 								BJetPTmin.push_back(PTmin);
 							}
 						}
+						else if(NameCate=="TauJets")
+						{
+							for (int i = 0; i < Num; ++i)
+							{
+								config>>PTmin;
+								TauJetPTmin.push_back(PTmin);
+							}
+						}
 						else if(NameCate=="Leps")
 						{
 							for (int i = 0; i < Num; ++i)

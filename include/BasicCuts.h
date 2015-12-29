@@ -23,6 +23,7 @@ private:
 	vector<double> JetPTmin;
 	vector<double> RJetPTmin;
 	vector<double> BJetPTmin;
+	vector<double> TauJetPTmin;
 	vector<double> LepPTmin;
 	int NLepNZ[2];
 	double EtamaxJet;

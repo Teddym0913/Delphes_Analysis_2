@@ -25,6 +25,9 @@ public:
 	int NBJets;
 	int NTauJets;
 	double HT;
+	double PTJLeading;
+	double EtaJLeading;
+	double PTJoverMET;
 	double Meff;
 	double MT;
 	double MET;
@@ -53,8 +56,11 @@ public:
 	double Get_MT(LepSysInfo );
 	double Get_dMLL();
 	double Get_MT2();
+	double Get_PTJLeading();
+	double Get_EtaJLeading();
 	int Get_NJetsTot();
-	int Get_NBjets();
+	int Get_NBJets();
+	int Get_NTauJets();
 
 	ClassDef(EachEvent,1);
 

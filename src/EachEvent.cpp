@@ -18,6 +18,8 @@ EachEvent::EachEvent()
 	dMLL=0;
 	HT=0;
 	Meff=0;
+	PTJLeading=0;
+	EtaJLeading=0;
 	MT=0;
 	MT2=0;
 }
@@ -38,8 +40,9 @@ void EachEvent::SetSource(TreeReader* reader)
 void EachEvent::SetData(LepSysInfo ZLepInfo)
 {
 	Weight=Get_Weight();
-	NBjets=Get_NBjets();
-	NJets=Get_NJetsTot();//-NBjets;
+	NBJets=Get_NBJets();
+	NTauJets=Get_NTauJets();
+	NJets=Get_NJetsTot()-NTauJets;//-NBjets;
 	MET=Get_MET();
 	dMLL=0;
 	HT=Get_HT();
@@ -70,6 +73,16 @@ double EachEvent::Get_HT()
 	}
 	return HTtemp;
 } 
+
+double EachEvent::Get_PTJLeading()
+{
+	return ((Jet*)iteJet->second->At(0))->PT;
+}
+
+double EachEvent::Get_EtaJLeading()
+{
+	return ((Jet*)iteJet->second->At(0))->Eta;
+}
 
 double EachEvent::Get_Meff()
 {
@@ -146,6 +159,7 @@ double EachEvent::Get_MT(LepSysInfo ZLepInfo)
 	{
 		IndexMutemp = ZLepInfo.GetIndex_Unpair_muminus(0)<ZLepInfo.GetIndex_Unpair_muplus(0)?ZLepInfo.GetIndex_Unpair_muminus(0):ZLepInfo.GetIndex_Unpair_muplus(0);
 	}
+
 
 	if (IndexEtemp!=999&&IndexMutemp==999)
 	{
@@ -272,16 +286,26 @@ int EachEvent::Get_NJetsTot()
 {
 	return iteJet->second->GetEntriesFast();
 }
-
-int EachEvent::Get_NBjets()
+int EachEvent::Get_NBJets()
 {
-	int NBjetsTemp=0;
+	int NBJetsTemp=0;
 	int NJetsTot=iteJet->second->GetEntriesFast();
 	for (int njet = 0; njet < NJetsTot; ++njet)
 		{
-			NBjetsTemp+=(((Jet*)iteJet->second->At(njet))->BTag & (1<<0));
+			NBJetsTemp+=(((Jet*)iteJet->second->At(njet))->BTag & (1<<0));
 		}
-	return NBjetsTemp;
+	return NBJetsTemp;
+}
+
+int EachEvent::Get_NTauJets()
+{
+	int NTauJetsTemp=0;
+	int NJetsTot=iteJet->second->GetEntriesFast();
+	for (int njet = 0; njet < NJetsTot; ++njet)
+	{
+		NTauJetsTemp+=(((Jet*)iteJet->second->At(njet))->TauTag & (1<<0));
+	}
+	return NTauJetsTemp;
 }
 
 double EachEvent::Get_MT2()
