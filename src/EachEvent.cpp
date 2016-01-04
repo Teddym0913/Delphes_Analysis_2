@@ -44,10 +44,13 @@ void EachEvent::SetData(LepSysInfo ZLepInfo)
 	NTauJets=Get_NTauJets();
 	NJets=Get_NJetsTot()-NTauJets;//-NBjets;
 	MET=Get_MET();
+	PTJLeading=Get_PTJLeading();
+	EtaJLeading=Get_EtaJLeading();
+	PTJoverMET=PTJLeading/MET;
 	dMLL=0;
 	HT=Get_HT();
 	Meff=Get_Meff();
-	MT=Get_MT(ZLepInfo);
+	MT=0;//Get_MT(ZLepInfo);
 	MT2=0;
 }
 
