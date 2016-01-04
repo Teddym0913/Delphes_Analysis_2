@@ -1,17 +1,17 @@
 Basic Cuts:
 {
-    PTmin Jets 1 20  ## PTmin Jets Num-of-Following-PT PT1 PT2 ... PTmin for all jets
+    PTmin Jets 2 120 30  ## PTmin Jets Num-of-Following-PT PT1 PT2 ... PTmin for all jets
     PTmin RJets 0 0 ## PTmin RJets Num-of-Following-PT(also the min Num of RJets) PT1 PT2 ... PTmin for regular jets
     PTmin BJets 0 30  ## PTmin BJets Num-of-Following-PT(also the min Num of BJets) PT1 PT2 ... PTmin for b-jets
     PTmin TauJets 0 20 ## PTmin TauJets Num-of-Foll
-    PTmin Leps 3 20 0 10 ## PTmin Leps Num-of-Following-PT PT1 PT2 ... PTmin
-    Etamax Jet 2.4  
+    PTmin Leps 1 20 ## PTmin Leps Num-of-Following-PT PT1 PT2 ... PTmin
+    Etamax Jet 4.5  
     Etamax Lep 2.4
     dRJJ 0.4
     dRJL 0.4
     dRLL 0.4
-    dPhiJMET 0.8 0.8
-    NLep&&NZ 3 1 ## Number_of_Leps Number_of_Z_Candidates(0 for Z-veto, -1 for Not care about the #Z) 
+    dPhiJMET 0.0 1.0
+    NLep&&NZ 0 -1 ## Number_of_Leps Number_of_Z_Candidates(0 for Z-veto, -1 for Not care about the #Z) 
     
 }
 

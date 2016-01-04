@@ -327,8 +327,8 @@ void signal_AdvancedLoop(char const *filename)
 int main(int argc, char const *argv[])
 {
 	//background_BasicLoop("./config/background_loop");	
-	//signal_BasicLoop("./config/signal_loop");
-	background_AdvancedLoop("./config/background_loop");
+	signal_BasicLoop("./config/signal_loop");
+	//background_AdvancedLoop("./config/background_loop");
 	signal_AdvancedLoop("./config/signal_loop");
 	//BasicCutsOutput("BenchmarkPoint_150_650","/home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background","/home/teddy/Newspace/workingspace/MG5_DATA/Case_III_RHsbottom/Background","single");
 

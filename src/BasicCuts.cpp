@@ -304,7 +304,7 @@ bool BasicCuts::BasicdPhi(TClonesArray *CandidatesArrayJet, const TClonesArray *
 		{
 			PJet = ((Jet *)CandidatesArrayJet->At(iJet))->P4();
 			dPhitemp = fabs(PJet.DeltaPhi(PMET));
-			if(dPhitemp>dPhiJMET[0] && dPhitemp<dPhiJMET[1])
+			if(dPhitemp>=dPhiJMET[0] && dPhitemp<dPhiJMET[1])
 			{
 				return false;
 			}
@@ -336,14 +336,18 @@ bool BasicCuts::BasicNLepNZ(TClonesArray *CandidatesArrayLepEle, TClonesArray *C
 	{
 		LepPT.push_back(((Muon *)CandidatesArrayLepMuon->At(iLep))->PT);
 	}
-	sort(LepPT.begin(),LepPT.end(),IncrPT); //Sort LepPT in Increasing Order
+	sort(LepPT.begin(),LepPT.end(),IncrPT); //Sort LepPT in Decreasing Order
 	for (int iLep = 0; iLep < LepPT.size(); ++iLep)
 	{
 		if(LepPT[iLep]<PTmin[iLep]) return false;
 	}
 
 	ZLepInfo.SetInputArray(CandidatesArrayLepEle, CandidatesArrayLepMuon);
-	if (NLepNZ[1]!=-1&&NLepNZ[1]!=ZLepInfo.GetN_ZCandidates())
+	if (NLepNZ[1]==-1) // Do not care about the Number of Z;
+	{
+		return true;
+	}
+	else if (NLepNZ[1]!=ZLepInfo.GetN_ZCandidates())
 	{
 		return false;
 	}
