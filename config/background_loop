@@ -1,7 +1,9 @@
-OUTPUT_PATH: /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Advanced
+OUTPUT_PATH: /export/home/thcollab/MC-Package/MG5_aMC_v2_2_3/TEDWORK/Monojet/Data/bkg_14TeV/Bj-4p/Af_Basic
 # This file controls the loop over background
 # Number of Background
-NB 2
+NB 1
+Bj-4p 7 0-300 34409920 1 /export/home/thcollab/MC-Package/MG5_aMC_v2_2_3/TEDWORK/Monojet/Data/bkg_14TeV/Bj-4p/0-300 300-600 2642850 1 /export/home/thcollab/MC-Package/MG5_aMC_v2_2_3/TEDWORK/Monojet/Data/bkg_14TeV/Bj-4p/300-600 600-1100 294120 1 /export/home/thcollab/MC-Package/MG5_aMC_v2_2_3/TEDWORK/Monojet/Data/bkg_14TeV/Bj-4p/600-1100 1100-1800 25950 1 /export/home/thcollab/MC-Package/MG5_aMC_v2_2_3/TEDWORK/Monojet/Data/bkg_14TeV/Bj-4p/1100-1800 1800-2700 2420 1 /export/home/thcollab/MC-Package/MG5_aMC_v2_2_3/TEDWORK/Monojet/Data/bkg_14TeV/Bj-4p/1800-2700 2700-3700 230 1 /export/home/thcollab/MC-Package/MG5_aMC_v2_2_3/TEDWORK/Monojet/Data/bkg_14TeV/Bj-4p/2700-3700 3700-100000 28 1 /export/home/thcollab/MC-Package/MG5_aMC_v2_2_3/TEDWORK/Monojet/Data/bkg_14TeV/Bj-4p/3700-100000 
+B-4p 1 0-1 200944680 1 /export/home/thcollab/MC-Package/MG5_aMC_v2_2_3/TEDWORK/Monojet/Data/bkg_14TeV/B-4p
 BBB-4p 3 0-600 2570 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 600-1300 150 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 1300-100000 13 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic
 ttB-4p 4 0-900 2670 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 900-1600 250 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 1600-2500 24 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 2500-100000 2.1 1 /export/home/thcollab/MC-Package/BlindSpots/bkg_Data/3lep_Channel/Af_Basic 
 
