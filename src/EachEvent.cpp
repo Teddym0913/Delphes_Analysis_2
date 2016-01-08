@@ -20,6 +20,7 @@ EachEvent::EachEvent()
 	Meff=0;
 	PTJLeading=0;
 	EtaJLeading=0;
+	dPhiJJ=0;
 	MT=0;
 	MT2=0;
 }
@@ -47,6 +48,7 @@ void EachEvent::SetData(LepSysInfo ZLepInfo)
 	PTJLeading=Get_PTJLeading();
 	EtaJLeading=Get_EtaJLeading();
 	PTJoverMET=PTJLeading/MET;
+	dPhiJJ=Get_dPhiJJ();
 	dMLL=0;
 	HT=Get_HT();
 	Meff=Get_Meff();
@@ -85,6 +87,21 @@ double EachEvent::Get_PTJLeading()
 double EachEvent::Get_EtaJLeading()
 {
 	return ((Jet*)iteJet->second->At(0))->Eta;
+}
+
+double EachEvent::Get_dPhiJJ()
+{
+	if (iteJet->second->GetEntriesFast()<2)
+	{
+		return 0;
+	}
+	else
+	{
+		TLorentzVector j1,j2;
+		j1=((Jet*)iteJet->second->At(0))->P4();
+		j2=((Jet*)iteJet->second->At(1))->P4();
+		return j1->DeltaPhi(j2);
+	}
 }
 
 double EachEvent::Get_Meff()

@@ -28,6 +28,7 @@ public:
 	double PTJLeading;
 	double EtaJLeading;
 	double PTJoverMET;
+	double dPhiJJ;
 	double Meff;
 	double MT;
 	double MET;
@@ -48,7 +49,7 @@ public:
 	void SetData(LepSysInfo );
 	void SetMT2LorentzVector(TLorentzVector&, TLorentzVector&);
 //    Advanced_Data *Advanced_Data
-
+    double Get_dPhiJJ();
 	double Get_Weight();
 	double Get_MET();
 	double Get_HT();

@@ -43,7 +43,7 @@ private:
 	void BasicElePTminEtamax(TClonesArray *,double,double);
 	void BasicMuonPTminEtamax(TClonesArray *,double,double);
 	bool BasicLeadingPT(TClonesArray *,vector<double>);
-	bool BasicLeadingPT(TClonesArray *,vector<double>,vector<double>); // Select the leading Regular Jet PT and leading B-Jet PT also require the minimum number of Regular Jet and B-Jet
+	bool BasicLeadingPT(TClonesArray *,vector<double>,vector<double>,vector<double>); // Select the leading Regular Jet PT and leading B-Jet PT also require the minimum number of Regular Jet and B-Jet
 	//bool BasicLeadingPT(TClonesArray *, TClonesArray *, vector<double>);
 	//bool BasicdR(TClonesArray*, double);
 	void BasicdREle(TClonesArray*,TClonesArray*,double);
